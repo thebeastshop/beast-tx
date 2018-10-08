@@ -17,14 +17,15 @@
 		<fastjson.version>1.2.29</fastjson.version>
 		<common.lang.version>3.5</common.lang.version>
 		<common.codec.version>1.10</common.codec.version>
-        <spring.version>4.3.19.RELEASE</spring.version>
+        <spring.version>4.2.6.RELEASE</spring.version>
 		<dubbo.version>2.8.4</dubbo.version>
 		<zk.version>3.4.6</zk.version>
 		<zkClient.version>0.1</zkClient.version>
 		<mysql.version>5.1.41</mysql.version>
 		<javassist.version>3.12.0.GA</javassist.version>
 		<disruptor.version>3.4.1</disruptor.version>
-		<aspectj.version>1.8.13</aspectj.version>    </properties>
+		<aspectj.version>1.8.13</aspectj.version>
+	</properties>
     
     <dependencyManagement>
     <dependencies>
