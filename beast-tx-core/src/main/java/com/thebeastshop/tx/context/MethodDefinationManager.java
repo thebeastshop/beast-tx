@@ -7,6 +7,7 @@
  */
 package com.thebeastshop.tx.context;
 
+import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.context.content.MethodContent;
 import com.thebeastshop.tx.enums.TccMethodTypeEnum;
 import com.thebeastshop.tx.hook.CancelInvokeHook;
@@ -20,10 +21,6 @@ import java.util.Map;
  * 方法定义管理器
  */
 public class MethodDefinationManager {
-
-    private static final String TRY_PREFIX = "try";
-
-    private static final String CANCEL_PREFIX = "cancel";
 
     private static Map<String, MethodContent> methodContentMap = new HashMap<>();
 
@@ -51,9 +48,9 @@ public class MethodDefinationManager {
     }
 
     private static TccMethodTypeEnum getMethodType(Method m){
-        if(m.getName().startsWith(TRY_PREFIX)){
+        if(m.getName().startsWith(TxConstant.TRY_PREFIX)){
             return TccMethodTypeEnum.TRY;
-        }else if(m.getName().startsWith(CANCEL_PREFIX)){
+        }else if(m.getName().startsWith(TxConstant.CANCEL_PREFIX)){
             return TccMethodTypeEnum.CANCEL;
         }else{
             return TccMethodTypeEnum.CONFIRM;
@@ -63,7 +60,7 @@ public class MethodDefinationManager {
     private static Method findTryMethod(Method confirmMethod,Method[] methods){
         for(Method m : methods){
             if(getMethodType(m).equals(TccMethodTypeEnum.TRY)
-                    && m.getName().equals(MethodUtil.mergeMethodName(TRY_PREFIX,confirmMethod.getName()))
+                    && m.getName().equals(MethodUtil.mergeMethodName(TxConstant.TRY_PREFIX,confirmMethod.getName()))
                     && MethodUtil.matchParameterTypes(m,confirmMethod,true)){
                 return m;
             }
@@ -74,7 +71,7 @@ public class MethodDefinationManager {
     private static Method findCancelMethod(Method confirmMethod,Method[] methods){
         for(Method m : methods){
             if(getMethodType(m).equals(TccMethodTypeEnum.CANCEL)
-                    && m.getName().equals(MethodUtil.mergeMethodName(CANCEL_PREFIX,confirmMethod.getName()))
+                    && m.getName().equals(MethodUtil.mergeMethodName(TxConstant.CANCEL_PREFIX,confirmMethod.getName()))
                     && MethodUtil.matchParameterTypes(m,confirmMethod,false)){
                 return m;
             }
