@@ -27,7 +27,6 @@
 		<aspectj.version>1.8.13</aspectj.version>
 	</properties>
     
-    <dependencyManagement>
     <dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -142,8 +141,7 @@
 			<version>${aspectj.version}</version>
 		</dependency>
 	</dependencies>
-    </dependencyManagement>
-	
+
 	<build>
         <plugins>
             <plugin>
