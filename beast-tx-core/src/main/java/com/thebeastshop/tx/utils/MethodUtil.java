@@ -8,6 +8,7 @@
 package com.thebeastshop.tx.utils;
 
 import com.alibaba.fastjson.JSON;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -106,5 +107,9 @@ public class MethodUtil {
             }
         }
         return methodList.toArray(new Method[methodList.size()]);
+    }
+
+    public static Object invokeMethod(Method method, Object target, Object... args){
+        return ReflectionUtils.invokeMethod(method,target,args);
     }
 }
