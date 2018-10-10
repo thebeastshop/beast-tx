@@ -11,12 +11,13 @@ import java.lang.reflect.Method;
 
 /**
  * TCC方法内容
+ * 如果不是TCC模式的话，则只有confirmMethod
  */
 public class MethodContent {
 
-    private Method tryMethod;
-
     private Method confirmMethod;
+
+    private Method tryMethod;
 
     private Method cancelMethod;
 
