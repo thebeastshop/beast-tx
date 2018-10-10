@@ -13,6 +13,11 @@
 	</parent>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.thebeastshop</groupId>
+			<artifactId>beast-tx-common</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 	</dependencies>
 
 </project>

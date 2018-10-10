@@ -40,13 +40,17 @@ public class InetUtils {
         return null;
     }
 
+    public static String getEncodeAddress(){
+        return Base64Utils.encode(getLocalAddress().getHostAddress());
+    }
+
+    public static String decodeAddress(String encodeAddress){
+        return Base64Utils.decode(encodeAddress);
+    }
+
     public static void main(String[] args) {
-        InetAddress address = getLocalAddress();
-        System.out.println("ip:" + address.getHostAddress());
-        System.out.println("hostname:" + address.getHostName());
-
-        System.out.println("base64 encode:" + Base64Utils.encode(address.getHostAddress()));
-
-
+        String encode = getEncodeAddress();
+        System.out.println(encode);
+        System.out.println(decodeAddress(encode));
     }
 }

@@ -29,6 +29,11 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.thebeastshop</groupId>
+			<artifactId>beast-tx-common</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 		<!-- spring boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -20,6 +20,8 @@ public class TxContext {
 
     private final static Logger log = LoggerFactory.getLogger(TxContext.class);
 
+    private String nodeId;
+
     private Long txId;
 
     private final ConcurrentLinkedDeque<InvokeContent> invokeQueue = new ConcurrentLinkedDeque<>();
