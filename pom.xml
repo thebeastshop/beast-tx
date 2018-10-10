@@ -124,5 +124,6 @@
 		<module>beast-tx-monitor</module>
 		<module>beast-tx-test</module>
 		<module>beast-tx-dubbo</module>
-	</modules>
+        <module>beast-tx-common</module>
+    </modules>
 </project>

@@ -15,9 +15,7 @@ public enum TxContextStateEnum {
     RETRYING,
     RETRY_SUCCESS,
     RETRY_FAILED,
-    rollback,
-
-
-
-
+    ROLLBACKING,
+    ROLLBACK_SUCCESS,
+    ROLLBACK_FAILED;
 }
