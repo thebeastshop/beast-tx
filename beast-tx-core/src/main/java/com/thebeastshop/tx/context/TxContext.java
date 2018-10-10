@@ -7,6 +7,24 @@
  */
 package com.thebeastshop.tx.context;
 
+import com.thebeastshop.tx.context.content.InvokeContent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.ConcurrentLinkedDeque;
+
+/**
+ * 事务上下文
+ */
 public class TxContext {
+
+    private final static Logger log = LoggerFactory.getLogger(TxContext.class);
+
+    private Long txId;
+
+    private final ConcurrentLinkedDeque<InvokeContent> invokeQueue = new ConcurrentLinkedDeque<>();
+
+
+
 
 }
