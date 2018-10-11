@@ -26,6 +26,24 @@ public class TxContext {
 
     private final ConcurrentLinkedDeque<InvokeContent> invokeQueue = new ConcurrentLinkedDeque<>();
 
+    public String getNodeId() {
+        return nodeId;
+    }
 
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    public Long getTxId() {
+        return txId;
+    }
+
+    public void setTxId(Long txId) {
+        this.txId = txId;
+    }
+
+    public void addInvokeQueue(InvokeContent invokeContent){
+        this.invokeQueue.add(invokeContent);
+    }
 
 }

@@ -11,5 +11,5 @@ package com.thebeastshop.tx.enums;
  * Tcc方法类型枚举
  */
 public enum TccMethodTypeEnum {
-    TRY,CONFIRM,CANCEL;
+    TRY,CONFIRM,CANCEL
 }
