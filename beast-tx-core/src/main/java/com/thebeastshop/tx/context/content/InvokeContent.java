@@ -7,14 +7,14 @@
  */
 package com.thebeastshop.tx.context.content;
 
-import com.thebeastshop.tx.enums.TxType;
+import com.thebeastshop.tx.enums.TxTypeEnum;
 
 /**
  * 调用内容
  */
 public class InvokeContent {
 
-    private TxType txType;
+    private TxTypeEnum txType;
 
     private MethodContent methodContent;
 
@@ -46,11 +46,11 @@ public class InvokeContent {
         this.result = result;
     }
 
-    public TxType getTxType() {
+    public TxTypeEnum getTxType() {
         return txType;
     }
 
-    public void setTxType(TxType txType) {
+    public void setTxType(TxTypeEnum txType) {
         this.txType = txType;
     }
 }

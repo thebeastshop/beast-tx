@@ -8,7 +8,7 @@
 package com.thebeastshop.tx.enums;
 
 /**
- * 事务上下文状态
+ * 事务上下文状态枚举
  */
 public enum TxContextStateEnum {
     SUCCESS,

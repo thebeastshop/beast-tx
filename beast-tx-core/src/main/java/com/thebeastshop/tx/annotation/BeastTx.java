@@ -7,7 +7,7 @@
  */
 package com.thebeastshop.tx.annotation;
 
-import com.thebeastshop.tx.enums.TxType;
+import com.thebeastshop.tx.enums.TxTypeEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -20,5 +20,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BeastTx {
-    TxType value() default TxType.TCC;
+    TxTypeEnum value() default TxTypeEnum.TCC;
 }

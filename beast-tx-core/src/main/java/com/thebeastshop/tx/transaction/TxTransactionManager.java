@@ -28,6 +28,7 @@ public class TxTransactionManager extends DataSourceTransactionManager {
 
     @Override
     protected void doBegin(Object transaction, TransactionDefinition definition) {
+
         super.doBegin(transaction, definition);
     }
 }

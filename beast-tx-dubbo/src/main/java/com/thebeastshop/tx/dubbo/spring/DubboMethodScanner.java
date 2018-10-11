@@ -7,9 +7,9 @@
  */
 package com.thebeastshop.tx.dubbo.spring;
 
+import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.exceptions.DubboMethodScanException;
-import com.thebeastshop.tx.exceptions.NoDubboDependencyException;
 import com.thebeastshop.tx.utils.MethodUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,23 +33,13 @@ public class DubboMethodScanner implements BeanPostProcessor,PriorityOrdered, Ap
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        Class referenceClass = null;
-        try {
-            referenceClass = Class.forName("com.alibaba.dubbo.config.spring.ReferenceBean");
-        } catch (ClassNotFoundException e) {
-            String errorMsg = "Cannot find dubbo dependency jar";
-            log.error(errorMsg,e);
-            throw new NoDubboDependencyException(errorMsg);
-        }
-
-        Class beanClass = bean.getClass();
-        if(referenceClass.isAssignableFrom(beanClass)){
+        if(ReferenceBean.class.isAssignableFrom(bean.getClass())){
             try {
                 //给dubbo设置filter
-                Method method = beanClass.getMethod("setFilter",String.class);
+                Method method = bean.getClass().getMethod("setFilter",String.class);
                 MethodUtil.invokeMethod(method,bean,new Object[]{"litxFilter"});
                 //注册进方法定义管理器
-                MethodDefinationManager.registerMethod(beanClass);
+                MethodDefinationManager.registerMethod(bean.getClass());
             } catch (Exception e) {
                 String errorMsg = "An exception occurs in the scanning of the Dubbo method";
                 log.error(errorMsg,e);
