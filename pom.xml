@@ -11,7 +11,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.7</java.version>
+		<java.version>1.8</java.version>
 		<junit.version>4.12</junit.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<fastjson.version>1.2.29</fastjson.version>
@@ -22,7 +22,7 @@
 		<zk.version>3.4.6</zk.version>
 		<zkClient.version>0.1</zkClient.version>
 		<mysql.version>5.1.41</mysql.version>
-		<javassist.version>3.12.0.GA</javassist.version>
+		<javassist.version>3.22.0-GA</javassist.version>
 		<disruptor.version>3.4.1</disruptor.version>
 		<aspectj.version>1.8.13</aspectj.version>
 	</properties>
@@ -89,7 +89,7 @@
 			<version>${mysql.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>javassist</groupId>
+			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 			<version>${javassist.version}</version>
 		</dependency>
