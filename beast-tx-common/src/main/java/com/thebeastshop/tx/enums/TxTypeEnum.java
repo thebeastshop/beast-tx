@@ -20,6 +20,10 @@ public enum TxTypeEnum {
         this.value = value;
     }
 
+    public String getValue() {
+        return value;
+    }
+
     public static TxTypeEnum getEnumByValue(String code) {
         for (TxTypeEnum e : TxTypeEnum.values()) {
             if (e.value.equals(code)) {
