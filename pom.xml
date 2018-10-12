@@ -25,6 +25,7 @@
 		<javassist.version>3.22.0-GA</javassist.version>
 		<disruptor.version>3.4.1</disruptor.version>
 		<aspectj.version>1.8.13</aspectj.version>
+		<tio.version>3.2.0.v20180918-RELEASE</tio.version>
 	</properties>
 
 	<dependencies>
@@ -102,6 +103,11 @@
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
 			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.t-io</groupId>
+		    <artifactId>tio-core</artifactId>
+		    <version>${tio.version}</version>
 		</dependency>
 	</dependencies>
 

@@ -3,36 +3,29 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.thebeastshop</groupId>
 	<artifactId>beast-tx-monitor</artifactId>
     <name>beast-tx-monitor</name>
+    <version>1.0.0-SNAPSHOT</version>
 
 	<parent>
-		<groupId>com.thebeastshop</groupId>
-		<artifactId>beast-tx</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.5.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	
 	<properties>
 		<mybatis.spring.boot.version>1.2.2</mybatis.spring.boot.version>
+		<disruptor.version>3.4.1</disruptor.version>
+		<beast.tx.common.version>1.0.0-SNAPSHOT</beast.tx.common.version>
 	</properties>
-	
-	<dependencyManagement>
-	    <dependencies>
-		    <dependency>
-			    <groupId>org.springframework.boot</groupId>
-			    <artifactId>spring-boot-dependencies</artifactId>
-			    <version>1.5.16.RELEASE</version>
-			    <type>pom</type>
-			    <scope>import</scope>
-		    </dependency>
-	    </dependencies>
-	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.thebeastshop</groupId>
 			<artifactId>beast-tx-common</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${beast.tx.common.version}</version>
 		</dependency>
 		<!-- spring boot -->
 		<dependency>
@@ -59,13 +52,14 @@
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.lmax</groupId>
-			<artifactId>disruptor</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>${mybatis.spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lmax</groupId>
+			<artifactId>disruptor</artifactId>
+			<version>${disruptor.version}</version>
 		</dependency>
 	</dependencies>
 	
