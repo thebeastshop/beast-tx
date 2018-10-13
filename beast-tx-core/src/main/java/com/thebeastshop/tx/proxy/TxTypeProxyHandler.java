@@ -9,7 +9,6 @@ package com.thebeastshop.tx.proxy;
 
 
 import com.thebeastshop.tx.enums.TxTypeEnum;
-import com.thebeastshop.tx.scan.demo.Demo;
 import com.thebeastshop.tx.transaction.TxTypeThreadLocalManager;
 
 import java.lang.reflect.InvocationHandler;
@@ -22,18 +21,22 @@ import java.util.Map;
  */
 public class TxTypeProxyHandler implements InvocationHandler {
 
+    private Object bean;
+
     private Map<Method, TxTypeEnum> methodTxTypeMap = new HashMap<>();
 
-    public TxTypeProxyHandler(Map<Method, TxTypeEnum> methodTxTypeMap) {
+    public TxTypeProxyHandler(Map<Method, TxTypeEnum> methodTxTypeMap,Object bean) {
         this.methodTxTypeMap = methodTxTypeMap;
+        this.bean = bean;
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         TxTypeEnum txType = methodTxTypeMap.get(method);
         if(txType != null){
+            System.out.println("-------" + txType + "-------");
             TxTypeThreadLocalManager.put(txType);
         }
-        return method.invoke(proxy,args);
+        return method.invoke(bean,args);
     }
 }

@@ -112,4 +112,20 @@ public class MethodUtil {
     public static Object invokeMethod(Method method, Object target, Object... args){
         return ReflectionUtils.invokeMethod(method,target,args);
     }
+
+    public static Method convertToInterfaceMethod(Method method){
+        Class[] interfaceArray = method.getDeclaringClass().getInterfaces();
+        if(interfaceArray.length == 0){
+            return null;
+        }
+        Method resultMethod = null;
+        for(Class itface : interfaceArray){
+            try {
+                resultMethod = itface.getMethod(method.getName(),method.getParameterTypes());
+            } catch (NoSuchMethodException e) {
+                continue;
+            }
+        }
+        return resultMethod;
+    }
 }

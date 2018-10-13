@@ -7,20 +7,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 //@Transactional(propagation = Propagation.NEVER)
 //@BeastTx(TxTypeEnum.FINAL_CONSISTENCY)
-public class Demo {
-    @Transactional
-    @BeastTx
+public class Demo implements IDemo{
+//    @Transactional
+//    @BeastTx
     public void test1(){
-
+        System.out.println("test1");
     }
 
     public void test1(String name){
-
+        System.out.println("test1 overload");
     }
 
     @Transactional
-    @BeastTx(TxTypeEnum.FINAL_CONSISTENCY)
+    @BeastTx(TxTypeEnum.TCC)
     public void test2(){
-
+        System.out.println("test2");
     }
 }

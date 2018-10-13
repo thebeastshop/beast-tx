@@ -7,10 +7,11 @@
  */
 package com.thebeastshop.tx.proxy;
 
-import com.google.common.collect.Maps;
 import com.thebeastshop.tx.annotation.BeastTx;
 import com.thebeastshop.tx.enums.TxTypeEnum;
+import com.thebeastshop.tx.exceptions.NoInterfaceDefineException;
 import com.thebeastshop.tx.scan.demo.Demo;
+import com.thebeastshop.tx.scan.demo.IDemo;
 import com.thebeastshop.tx.utils.MethodUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,12 @@ public class TxTypeScanLogic {
                 }else{
                     finalTxType = methodBeastTxAnno.value();
                 }
-                methodTxTypeMap.put(m, finalTxType);
+
+                Method interfaceMethod = MethodUtil.convertToInterfaceMethod(m);
+                if(interfaceMethod == null){
+                    throw new NoInterfaceDefineException("the transactional bean must have interface");
+                }
+                methodTxTypeMap.put(interfaceMethod, finalTxType);
                 log.info("find transactional method[{}],its txType is {}",m.getName(),finalTxType.getValue());
             }
         }else{
@@ -85,7 +91,12 @@ public class TxTypeScanLogic {
                 }else {
                     finalTxType = methodBeastTxAnno.value();
                 }
-                methodTxTypeMap.put(m, finalTxType);
+
+                Method interfaceMethod = MethodUtil.convertToInterfaceMethod(m);
+                if(interfaceMethod == null){
+                    throw new NoInterfaceDefineException("the transactional bean must have interface");
+                }
+                methodTxTypeMap.put(interfaceMethod, finalTxType);
                 log.info("find transactional method[{}],its txType is {}",m.getName(),finalTxType.getValue());
             }
         }
@@ -95,12 +106,24 @@ public class TxTypeScanLogic {
             Class[] interfaceClazzArray = bean.getClass().getInterfaces();
 
             //为这个类创建动态代理类
-            TxTypeProxyHandler proxyHandler = new TxTypeProxyHandler(methodTxTypeMap);
+            TxTypeProxyHandler proxyHandler = new TxTypeProxyHandler(methodTxTypeMap,bean);
             Object proxyObject = Proxy.newProxyInstance(proxyHandler.getClass().getClassLoader(),
                     interfaceClazzArray, proxyHandler);
             log.info("create txType proxy object for class[{}]",clazz.getName());
             return proxyObject;
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        try{
+            IDemo demo = new Demo();
+            TxTypeScanLogic txTypeScanLogic = TxTypeScanLogic.loadInstance();
+            IDemo demoProxy = (IDemo) txTypeScanLogic.process(demo);
+            demoProxy.test2();
+        }catch (Throwable t){
+            t.printStackTrace();
+        }
+
     }
 }
