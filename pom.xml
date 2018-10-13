@@ -26,6 +26,7 @@
 		<disruptor.version>3.4.1</disruptor.version>
 		<aspectj.version>1.8.13</aspectj.version>
 		<tio.version>3.2.0.v20180918-RELEASE</tio.version>
+		<guava.version>19.0</guava.version>
 	</properties>
 
 	<dependencies>
@@ -108,6 +109,11 @@
 		    <groupId>org.t-io</groupId>
 		    <artifactId>tio-core</artifactId>
 		    <version>${tio.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
 		</dependency>
 	</dependencies>
 

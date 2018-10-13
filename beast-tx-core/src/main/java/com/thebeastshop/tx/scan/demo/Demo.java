@@ -1,4 +1,4 @@
-package com.thebeastshop.tx.scan;
+package com.thebeastshop.tx.scan.demo;
 
 import com.thebeastshop.tx.annotation.BeastTx;
 import com.thebeastshop.tx.enums.TxTypeEnum;
@@ -11,6 +11,10 @@ public class Demo {
     @Transactional
     @BeastTx
     public void test1(){
+
+    }
+
+    public void test1(String name){
 
     }
 

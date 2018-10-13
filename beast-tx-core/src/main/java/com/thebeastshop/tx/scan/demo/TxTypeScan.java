@@ -5,7 +5,7 @@
  * @email weenyc31@163.com
  * @Date 2018/10/11
  */
-package com.thebeastshop.tx.scan;
+package com.thebeastshop.tx.scan.demo;
 
 import com.thebeastshop.tx.annotation.BeastTx;
 import com.thebeastshop.tx.constant.TxConstant;

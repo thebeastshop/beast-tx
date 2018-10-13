@@ -12,6 +12,8 @@ import com.thebeastshop.tx.context.content.MethodContent;
 import com.thebeastshop.tx.enums.TccMethodTypeEnum;
 import com.thebeastshop.tx.hook.CancelInvokeHook;
 import com.thebeastshop.tx.utils.MethodUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -21,6 +23,8 @@ import java.util.Map;
  * 方法定义管理器
  */
 public class MethodDefinationManager {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodDefinationManager.class);
 
     private static Map<String, MethodContent> methodContentMap = new HashMap<>();
 
@@ -33,6 +37,12 @@ public class MethodDefinationManager {
             if(getMethodType(m).equals(TccMethodTypeEnum.CONFIRM)){
                 Method tryMethod = findTryMethod(m,methods);
                 Method cancelMethod = findCancelMethod(m,methods);
+                log.info("register beastTx method[{}.{}], its try-method:{},its cancel-method:{}],",
+                        clazz.getName(),
+                        m.getName(),
+                        tryMethod == null?null:tryMethod.getName(),
+                        cancelMethod == null?null:cancelMethod.getName());
+
                 methodContent = new MethodContent(tryMethod,m,cancelMethod);
                 methodContentMap.put(MethodUtil.getMethodKey(m),methodContent);
             }
