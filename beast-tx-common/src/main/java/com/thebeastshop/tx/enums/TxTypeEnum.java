@@ -11,8 +11,8 @@ package com.thebeastshop.tx.enums;
  * 事务策略类型枚举
  */
 public enum TxTypeEnum {
-    FINAL_CONSISTENCY("_FINAL_CONSISTENCY"),
-    TCC("_TCC");
+    FINAL_CONSISTENCY("FINAL_CONSISTENCY"),
+    TCC("TCC");
 
     private String value;
 

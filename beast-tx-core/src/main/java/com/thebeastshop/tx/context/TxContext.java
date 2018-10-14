@@ -8,6 +8,8 @@
 package com.thebeastshop.tx.context;
 
 import com.thebeastshop.tx.context.content.InvokeContent;
+import com.thebeastshop.tx.enums.TxContextStateEnum;
+import com.thebeastshop.tx.enums.TxTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +26,18 @@ public class TxContext {
 
     private Long txId;
 
+    private TxTypeEnum txType;
+
+    private TxContextStateEnum txContextState;
+
     private final ConcurrentLinkedDeque<InvokeContent> invokeQueue = new ConcurrentLinkedDeque<>();
+
+    public TxContext(String nodeId, Long txId, TxTypeEnum txType, TxContextStateEnum txContextState) {
+        this.nodeId = nodeId;
+        this.txId = txId;
+        this.txType = txType;
+        this.txContextState = txContextState;
+    }
 
     public String getNodeId() {
         return nodeId;
@@ -46,4 +59,19 @@ public class TxContext {
         this.invokeQueue.add(invokeContent);
     }
 
+    public TxTypeEnum getTxType() {
+        return txType;
+    }
+
+    public void setTxType(TxTypeEnum txType) {
+        this.txType = txType;
+    }
+
+    public TxContextStateEnum getTxContextState() {
+        return txContextState;
+    }
+
+    public void setTxContextState(TxContextStateEnum txContextState) {
+        this.txContextState = txContextState;
+    }
 }

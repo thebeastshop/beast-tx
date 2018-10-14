@@ -11,6 +11,7 @@ package com.thebeastshop.tx.enums;
  * 事务上下文状态枚举
  */
 public enum TxContextStateEnum {
+    INIT,
     SUCCESS,
     RETRYING,
     RETRY_SUCCESS,

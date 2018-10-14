@@ -9,8 +9,13 @@ package com.thebeastshop.tx.transaction;
 
 import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.context.TxContext;
+import com.thebeastshop.tx.enums.TxContextStateEnum;
+import com.thebeastshop.tx.enums.TxTypeEnum;
+import com.thebeastshop.tx.utils.InetUtils;
+import com.thebeastshop.tx.utils.UniqueIdGenerator;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
@@ -28,7 +33,21 @@ public class TxTransactionManager extends DataSourceTransactionManager {
 
     @Override
     protected void doBegin(Object transaction, TransactionDefinition definition) {
-
         super.doBegin(transaction, definition);
+        TxContext txContext = new TxContext(InetUtils.getEncodeAddress(), UniqueIdGenerator.generateId(),
+                TxTypeThreadLocalManager.get(), TxContextStateEnum.INIT);
+        TransactionSynchronizationManager.bindResource(TxConstant.TRANSACTION_CONTEXT_KEY, txContext);
+    }
+
+    @Override
+    protected void doRollback(DefaultTransactionStatus status) {
+        super.doRollback(status);
+    }
+
+    @Override
+    protected void doCleanupAfterCompletion(Object transaction) {
+        super.doCleanupAfterCompletion(transaction);
+        TransactionSynchronizationManager.unbindResource(TxConstant.TRANSACTION_CONTEXT_KEY);
+        TxTypeThreadLocalManager.remove();
     }
 }
