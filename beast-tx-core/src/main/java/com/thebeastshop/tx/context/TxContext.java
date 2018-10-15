@@ -74,4 +74,12 @@ public class TxContext {
     public void setTxContextState(TxContextStateEnum txContextState) {
         this.txContextState = txContextState;
     }
+
+    public void logInvokeContent(InvokeContent invokeContent){
+        log.info("[BEAST-TX]事务ID[{}]记录RPC方法[{}],这个调用的策略状态为[{}]",
+                this.getTxId(),
+                invokeContent.getMethodContent().getConfirmMethod().getName(),
+                invokeContent.getTxType().getValue());
+        invokeQueue.add(invokeContent);
+    }
 }

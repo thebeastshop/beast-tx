@@ -68,10 +68,10 @@ public class TxTypeScanLogic {
 
                 Method interfaceMethod = MethodUtil.convertToInterfaceMethod(m);
                 if(interfaceMethod == null){
-                    throw new NoInterfaceDefineException("the transactional bean must have interface");
+                    throw new NoInterfaceDefineException("事务Bean必须得申明接口");
                 }
                 methodTxTypeMap.put(interfaceMethod, finalTxType);
-                log.info("find transactional method[{}],its txType is {}",m.getName(),finalTxType.getValue());
+                log.info("找到事务方法[{}],事务策略是{}",m.getName(),finalTxType.getValue());
             }
         }else{
             //如果类上没有发现@Transactional标签，则遍历每一个方法，看看方法上是否有@Transactional标签
@@ -94,10 +94,10 @@ public class TxTypeScanLogic {
 
                 Method interfaceMethod = MethodUtil.convertToInterfaceMethod(m);
                 if(interfaceMethod == null){
-                    throw new NoInterfaceDefineException("the transactional bean must have interface");
+                    throw new NoInterfaceDefineException("事务Bean必须得申明接口");
                 }
                 methodTxTypeMap.put(interfaceMethod, finalTxType);
-                log.info("find transactional method[{}],its txType is {}",m.getName(),finalTxType.getValue());
+                log.info("找到事务方法[{}],事务策略是{}",m.getName(),finalTxType.getValue());
             }
         }
 
@@ -109,7 +109,7 @@ public class TxTypeScanLogic {
             TxTypeProxyHandler proxyHandler = new TxTypeProxyHandler(methodTxTypeMap,bean);
             Object proxyObject = Proxy.newProxyInstance(proxyHandler.getClass().getClassLoader(),
                     interfaceClazzArray, proxyHandler);
-            log.info("create txType proxy object for class[{}]",clazz.getName());
+            log.info("为class[{}]创建事务策略动态代理类",clazz.getName());
             return proxyObject;
         }
         return null;

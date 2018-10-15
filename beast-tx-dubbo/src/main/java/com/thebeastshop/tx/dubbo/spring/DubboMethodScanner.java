@@ -42,7 +42,7 @@ public class DubboMethodScanner implements BeanPostProcessor,PriorityOrdered, Ap
                 //注册进方法定义管理器
                 MethodDefinationManager.registerMethod(bean.getClass());
             } catch (Exception e) {
-                String errorMsg = "An exception occurs in the scanning of the Dubbo method";
+                String errorMsg = "扫描DUBBO接口的时候发生了异常";
                 log.error(errorMsg,e);
                 throw new DubboMethodScanException(errorMsg);
             }

@@ -8,8 +8,9 @@
 package com.thebeastshop.tx.proxy;
 
 
+import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.enums.TxTypeEnum;
-import com.thebeastshop.tx.transaction.TxTypeThreadLocalManager;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -34,8 +35,7 @@ public class TxTypeProxyHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         TxTypeEnum txType = methodTxTypeMap.get(method);
         if(txType != null){
-            System.out.println("-------" + txType + "-------");
-            TxTypeThreadLocalManager.put(txType);
+            TransactionSynchronizationManager.bindResource(TxConstant.TRANSACTION_TX_TYPE, txType);
         }
         return method.invoke(bean,args);
     }

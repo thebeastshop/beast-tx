@@ -35,19 +35,24 @@ public class TxTransactionManager extends DataSourceTransactionManager {
     protected void doBegin(Object transaction, TransactionDefinition definition) {
         super.doBegin(transaction, definition);
         TxContext txContext = new TxContext(InetUtils.getEncodeAddress(), UniqueIdGenerator.generateId(),
-                TxTypeThreadLocalManager.get(), TxContextStateEnum.INIT);
+                (TxTypeEnum) TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_TX_TYPE),
+                TxContextStateEnum.INIT);
         TransactionSynchronizationManager.bindResource(TxConstant.TRANSACTION_CONTEXT_KEY, txContext);
     }
 
     @Override
     protected void doRollback(DefaultTransactionStatus status) {
-        super.doRollback(status);
+        TxContext txContext = (TxContext) TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_CONTEXT_KEY);
+        //如果为TCC策略的时候。不进行回滚
+        if(txContext.getTxType().equals(TxTypeEnum.TCC)){
+            super.doRollback(status);
+        }
     }
 
     @Override
     protected void doCleanupAfterCompletion(Object transaction) {
         super.doCleanupAfterCompletion(transaction);
         TransactionSynchronizationManager.unbindResource(TxConstant.TRANSACTION_CONTEXT_KEY);
-        TxTypeThreadLocalManager.remove();
+        TransactionSynchronizationManager.unbindResource(TxConstant.TRANSACTION_TX_TYPE);
     }
 }
