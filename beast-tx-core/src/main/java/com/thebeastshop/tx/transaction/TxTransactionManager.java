@@ -11,6 +11,7 @@ import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.context.TxContext;
 import com.thebeastshop.tx.enums.TxContextStateEnum;
 import com.thebeastshop.tx.enums.TxTypeEnum;
+import com.thebeastshop.tx.exceptions.RollbackException;
 import com.thebeastshop.tx.utils.InetUtils;
 import com.thebeastshop.tx.utils.UniqueIdGenerator;
 import org.slf4j.Logger;
@@ -52,7 +53,14 @@ public class TxTransactionManager extends DataSourceTransactionManager {
         if(txContext.getTxType().equals(TxTypeEnum.TCC)){
             log.info("[BEAST-TX]开始回滚事务，事务ID[{}]，事务策略类型[{}]",txContext.getTxId(),txContext.getTxType());
             txContext.setTxContextState(TxContextStateEnum.ROLLBACKING);
-            //TODO
+            try{
+                txContext.rollback();
+            }catch(RollbackException e){
+                log.error(e.getMessage());
+                txContext.setTxContextState(TxContextStateEnum.ROLLBACK_FAILED);
+            }
+
+            txContext.setTxContextState(TxContextStateEnum.ROLLBACK_SUCCESS);
             super.doRollback(status);
         }
     }
@@ -68,7 +76,7 @@ public class TxTransactionManager extends DataSourceTransactionManager {
     protected void doCommit(DefaultTransactionStatus status) {
         TxContext txContext = (TxContext) TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_CONTEXT_KEY);
         txContext.setTxContextState(TxContextStateEnum.SUCCESS);
-        log.info("[BEAST-TX]开始回滚事务，事务ID[{}]，事务策略类型[{}]",txContext.getTxId(),txContext.getTxType());
+        log.info("[BEAST-TX]事务成功，事务ID[{}]，事务策略类型[{}]",txContext.getTxId(),txContext.getTxType());
         super.doCommit(status);
     }
 }

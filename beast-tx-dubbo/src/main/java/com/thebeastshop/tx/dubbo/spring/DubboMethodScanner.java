@@ -9,7 +9,7 @@ package com.thebeastshop.tx.dubbo.spring;
 
 import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.thebeastshop.tx.context.MethodDefinationManager;
-import com.thebeastshop.tx.exceptions.DubboMethodScanException;
+import com.thebeastshop.tx.dubbo.exceptions.DubboMethodScanException;
 import com.thebeastshop.tx.proxy.TxTypeScanLogic;
 import com.thebeastshop.tx.utils.MethodUtil;
 import org.slf4j.Logger;

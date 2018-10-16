@@ -8,13 +8,13 @@
 package com.thebeastshop.tx.exceptions;
 
 /**
- * dubbo方法扫描中异常
+ * 回滚异常
  */
-public class DubboMethodScanException extends RuntimeException {
+public class RollbackException extends RuntimeException {
 
     private String message;
 
-    public DubboMethodScanException(String message) {
+    public RollbackException(String message) {
         this.message = message;
     }
 

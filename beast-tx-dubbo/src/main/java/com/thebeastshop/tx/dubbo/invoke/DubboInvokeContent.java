@@ -10,6 +10,7 @@ package com.thebeastshop.tx.dubbo.invoke;
 import com.thebeastshop.tx.context.content.InvokeContent;
 import com.thebeastshop.tx.context.content.MethodContent;
 import com.thebeastshop.tx.dubbo.spring.DubboMethodScanner;
+import com.thebeastshop.tx.exceptions.RollbackException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.text.MessageFormat;
@@ -37,6 +38,7 @@ public class DubboInvokeContent extends InvokeContent {
                         this.getInterfaceClass().getName(),
                         this.getMethodContent().getCancelMethod().getName());
                 log.error(errorMsg,e);
+                throw new RollbackException(errorMsg);
             }
         }else{
             log.warn("[BEAST-TX]事务ID[{}]，没有找到接口[{}]中方法[{}]的回滚方法，不回滚",
