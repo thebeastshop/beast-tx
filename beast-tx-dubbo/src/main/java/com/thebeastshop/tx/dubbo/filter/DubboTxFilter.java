@@ -13,6 +13,7 @@ import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.context.TxContext;
 import com.thebeastshop.tx.context.content.InvokeContent;
 import com.thebeastshop.tx.context.content.MethodContent;
+import com.thebeastshop.tx.dubbo.invoke.DubboInvokeContent;
 import com.thebeastshop.tx.enums.TxTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,41 +31,65 @@ public class DubboTxFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         Result result = invoker.invoke(invocation);
-        TxTypeEnum txType = (TxTypeEnum)TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_TX_TYPE);
+
+        TxContext txContext = null;
+        if(TransactionSynchronizationManager.hasResource(TxConstant.TRANSACTION_CONTEXT_KEY)){
+            txContext = (TxContext)TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_CONTEXT_KEY);
+        }
+
+        if(txContext == null){
+            return result;
+        }
+
+        TxTypeEnum txType = txContext.getTxType();
+
+        Method method = null;
+        try {
+            method = getInvokeMethod(invoker, invocation);
+        } catch (NoSuchMethodException e) {
+            log.error("找不到DUBBO方法[{}]",invocation.getMethodName());
+            return result;
+        }
+
+        MethodContent methodContent = MethodDefinationManager.getMethodCentent(method);
+
+        if(methodContent == null){
+            return result;
+        }
 
         if(txType.equals(TxTypeEnum.TCC)){
             if(result == null || result.hasException()){
                 return result;
             }
-            TxContext txContext = (TxContext)TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_CONTEXT_KEY);
-            if(txContext == null){
-                return result;
-            }
-            Class interfaceClass = invoker.getInterface();
-            String methodName = invocation.getMethodName();
-            Class[] paramTypes = invocation.getParameterTypes();
-            Method method = null;
-            try {
-                method = interfaceClass.getMethod(methodName,paramTypes);
-            } catch (NoSuchMethodException e) {
-                log.error("no such dubbo method[{}]",methodName);
-                return result;
-            }
-
-            MethodContent methodContent = MethodDefinationManager.getMethodCentent(method);
-            if(methodContent == null){
-                return result;
-            }
-
-            InvokeContent invokeContent = new InvokeContent();
-            invokeContent.setTxType(txType);
-            invokeContent.setArgs(invocation.getArguments());
-            invokeContent.setResult(result);
-            invokeContent.setMethodContent(methodContent);
+            InvokeContent invokeContent = getInvokeContent(invoker,invocation,methodContent,txContext,result);
             txContext.logInvokeContent(invokeContent);
         }else if(txType.equals(TxTypeEnum.FINAL_CONSISTENCY)){
-
+            if(result == null || result.hasException()){
+                InvokeContent invokeContent = getInvokeContent(invoker,invocation,methodContent,txContext,result);
+                txContext.logInvokeContent(invokeContent);
+            }
         }
         return result;
+    }
+
+    private Method getInvokeMethod(Invoker<?> invoker, Invocation invocation) throws NoSuchMethodException{
+        Class interfaceClass = invoker.getInterface();
+        String methodName = invocation.getMethodName();
+        Class[] paramTypes = invocation.getParameterTypes();
+        return interfaceClass.getMethod(methodName,paramTypes);
+    }
+
+    private InvokeContent getInvokeContent(Invoker<?> invoker, Invocation invocation,
+                                           MethodContent methodContent, TxContext txContext,Result result){
+        Class interfaceClass = invoker.getInterface();
+
+        InvokeContent invokeContent = new DubboInvokeContent();
+        invokeContent.setInterfaceClass(interfaceClass);
+        invokeContent.setTxId(txContext.getTxId());
+        invokeContent.setTxType(txContext.getTxType());
+        invokeContent.setArgs(invocation.getArguments());
+        invokeContent.setResult(result);
+        invokeContent.setMethodContent(methodContent);
+        return invokeContent;
     }
 }

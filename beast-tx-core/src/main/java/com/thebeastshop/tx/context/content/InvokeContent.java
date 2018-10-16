@@ -9,10 +9,16 @@ package com.thebeastshop.tx.context.content;
 
 import com.thebeastshop.tx.enums.TxTypeEnum;
 
+import java.lang.reflect.Method;
+
 /**
  * 调用内容
  */
-public class InvokeContent {
+public abstract class InvokeContent {
+
+    private Class interfaceClass;
+
+    private Long txId;
 
     private TxTypeEnum txType;
 
@@ -21,6 +27,24 @@ public class InvokeContent {
     private Object[] args;
 
     private Object result;
+
+    public abstract void rollback();
+
+    public Class getInterfaceClass() {
+        return interfaceClass;
+    }
+
+    public void setInterfaceClass(Class interfaceClass) {
+        this.interfaceClass = interfaceClass;
+    }
+
+    public Long getTxId() {
+        return txId;
+    }
+
+    public void setTxId(Long txId) {
+        this.txId = txId;
+    }
 
     public MethodContent getMethodContent() {
         return methodContent;

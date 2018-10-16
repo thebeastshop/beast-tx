@@ -42,7 +42,7 @@ public class DubboMethodScanner implements BeanPostProcessor,PriorityOrdered, Ap
                 //注册进方法定义管理器
                 MethodDefinationManager.registerMethod(bean.getClass());
             } catch (Exception e) {
-                String errorMsg = "扫描DUBBO接口的时候发生了异常";
+                String errorMsg = "[BEAST-TX]扫描DUBBO接口的时候发生了异常";
                 log.error(errorMsg,e);
                 throw new DubboMethodScanException(errorMsg);
             }
@@ -64,6 +64,10 @@ public class DubboMethodScanner implements BeanPostProcessor,PriorityOrdered, Ap
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         DubboMethodScanner.applicationContext = applicationContext;
+    }
+
+    public static ApplicationContext getApplicationContext(){
+        return DubboMethodScanner.applicationContext;
     }
 
     @Override

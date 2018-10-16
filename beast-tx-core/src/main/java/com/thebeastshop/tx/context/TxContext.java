@@ -82,4 +82,11 @@ public class TxContext {
                 invokeContent.getTxType().getValue());
         invokeQueue.add(invokeContent);
     }
+
+    public void rollback(){
+        while (!invokeQueue.isEmpty()) {
+            final InvokeContent invokeContent = invokeQueue.pollLast();
+            invokeContent.rollback();
+        }
+    }
 }
