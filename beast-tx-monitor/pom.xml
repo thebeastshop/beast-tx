@@ -8,84 +8,40 @@
     <name>beast-tx-monitor</name>
     <version>1.0.0-SNAPSHOT</version>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.5.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	
 	<properties>
 		<mybatis.spring.boot.version>1.2.2</mybatis.spring.boot.version>
-		<disruptor.version>3.4.1</disruptor.version>
-		<beast.tx.common.version>1.0.0-SNAPSHOT</beast.tx.common.version>
+		<spring-boot.version>2.0.5.RELEASE</spring-boot.version>
 	</properties>
+
+	<parent>
+		<groupId>com.thebeastshop</groupId>
+		<artifactId>beast-tx</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.thebeastshop</groupId>
 			<artifactId>beast-tx-common</artifactId>
-			<version>${beast.tx.common.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
-		<!-- spring boot -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring-boot.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>${mybatis.spring.boot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.lmax</groupId>
-			<artifactId>disruptor</artifactId>
-			<version>${disruptor.version}</version>
+			<artifactId>spring-boot-dependencies</artifactId>
+			<version>${spring-boot.version}</version>
+			<type>pom</type>
+			<scope>import</scope>
 		</dependency>
 	</dependencies>
-	
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<properties>
-				<profiles.active>dev</profiles.active>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-		<profile>
-			<id>test</id>
-			<properties>
-				<profiles.active>test</profiles.active>
-			</properties>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<properties>
-				<profiles.active>prod</profiles.active>
-			</properties>
-		</profile>
-	</profiles>
 	
 	<build>
 		<resources>
@@ -96,8 +52,13 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.mybatis.generator</groupId>

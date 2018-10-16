@@ -8,8 +8,8 @@
 package com.thebeastshop.tx.utils;
 
 import com.alibaba.fastjson.JSON;
-import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
@@ -109,8 +109,8 @@ public class MethodUtil {
         return methodList.toArray(new Method[methodList.size()]);
     }
 
-    public static Object invokeMethod(Method method, Object target, Object... args){
-        return ReflectionUtils.invokeMethod(method,target,args);
+    public static Object invokeMethod(Method method, Object target, Object... args) throws InvocationTargetException, IllegalAccessException {
+        return method.invoke(target,args);
     }
 
     public static Method convertToInterfaceMethod(Method method){
