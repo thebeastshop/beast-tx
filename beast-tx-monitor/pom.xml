@@ -9,26 +9,36 @@
     <version>1.0.0-SNAPSHOT</version>
 
 	<properties>
+		<java.version>1.8</java.version>
 		<mybatis.spring.boot.version>1.2.2</mybatis.spring.boot.version>
-		<spring-boot.version>2.0.5.RELEASE</spring-boot.version>
+		<spring-boot.version>1.5.17.RELEASE</spring-boot.version>
+		<beast-tx-common.version>1.0.0-SNAPSHOT</beast-tx-common.version>
+		<mysql.version>5.1.41</mysql.version>
 	</properties>
 
-	<parent>
-		<groupId>com.thebeastshop</groupId>
-		<artifactId>beast-tx</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
-	</parent>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.thebeastshop</groupId>
 			<artifactId>beast-tx-common</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${beast-tx-common.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
 		</dependency>
 
 		<dependency>
@@ -38,9 +48,11 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j2</artifactId>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -78,7 +90,7 @@
 					<dependency>
 						<groupId>mysql</groupId>
 						<artifactId>mysql-connector-java</artifactId>
-						<version>5.1.38</version>
+						<version>${mysql.version}</version>
 					</dependency>
 				</dependencies>
 				<configuration>

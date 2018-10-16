@@ -12,7 +12,6 @@ import com.thebeastshop.tx.storage.server.StorageServer;
 import com.thebeastshop.tx.vo.Record;
 
 @SpringBootApplication
-@MapperScan("com.thebeastshop.tx.**.mapper")
 public class Application {
 
 	public static void main(String[] args) {
