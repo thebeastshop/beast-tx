@@ -3,23 +3,23 @@
  * <p>Description: 分布式事务框架，基于本地事务表模型，支持最终一致事务，TCC事务的事务框架平台</p >
  * @author Paul.Xiong
  * @email xiongleipaul@gmail.com
- * @Date 
+ * @Date 2018年10月12日
  */
-package com.thebeastshop.tx.record.storage.tio;
+package com.thebeastshop.tx.storage.tio.server;
 
 import org.tio.server.ServerGroupContext;
 import org.tio.server.TioServer;
-import org.tio.server.intf.ServerAioHandler;
 import org.tio.server.intf.ServerAioListener;
 
-import com.thebeastshop.tx.record.storage.RecordStorageServer;
+import com.thebeastshop.tx.storage.HandlerCallback;
+import com.thebeastshop.tx.storage.server.StorageServer;
 
 /**
  * 用t-io通信框架实现记录存储服务端
  */
-public class RecordStorageTioServer implements RecordStorageServer {
+public class StorageTioServer implements StorageServer {
 	// handler, 包括编码、解码、消息处理
-	public static ServerAioHandler aioHandler = new RecordServerAioHandler();
+	public static StorageServerAioHandler aioHandler = new StorageServerAioHandler();
 
 	// 事件监听器，可以为null，但建议自己实现该接口，可以参考showcase了解些接口
 	public static ServerAioListener aioListener = null;
@@ -40,8 +40,9 @@ public class RecordStorageTioServer implements RecordStorageServer {
 	public static final int timeout = 5000;
 
 	@Override
-	public void start() {
+	public void start(HandlerCallback callback) {
 		try {
+			aioHandler.callback = callback;
 			serverGroupContext.setHeartbeatTimeout(timeout);
 			tioServer.start(serverIp, serverPort);
 		} catch (Exception e) {
