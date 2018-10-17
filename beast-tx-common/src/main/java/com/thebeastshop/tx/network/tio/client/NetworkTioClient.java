@@ -15,7 +15,7 @@ import org.tio.client.intf.ClientAioListener;
 import org.tio.core.Node;
 import org.tio.core.Tio;
 
-import com.alibaba.fastjson.JSON;
+import com.thebeastshop.tx.network.HasBytes;
 import com.thebeastshop.tx.network.client.NetworkClient;
 import com.thebeastshop.tx.network.config.ClientConfig;
 import com.thebeastshop.tx.network.tio.NetworkPacket;
@@ -47,9 +47,9 @@ public class NetworkTioClient implements NetworkClient {
 	}
 
 	@Override
-	public <T> void send(T t) {
+	public void send(HasBytes t) {
 		NetworkPacket packet = new NetworkPacket();
-		packet.setBody(JSON.toJSONString(t).getBytes());
+		packet.setBody(t.toBytes());
 		Tio.send(clientChannelContext, packet);
 	}
 

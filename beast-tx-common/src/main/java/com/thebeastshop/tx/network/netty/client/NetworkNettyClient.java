@@ -7,7 +7,7 @@
  */
 package com.thebeastshop.tx.network.netty.client;
 
-import com.alibaba.fastjson.JSON;
+import com.thebeastshop.tx.network.HasBytes;
 import com.thebeastshop.tx.network.client.NetworkClient;
 import com.thebeastshop.tx.network.config.ClientConfig;
 
@@ -55,8 +55,8 @@ public class NetworkNettyClient implements NetworkClient {
 	}
 
 	@Override
-	public <T> void send(T t) {
-		ch.writeAndFlush(JSON.toJSONString(t).getBytes());
+	public void send(HasBytes t) {
+		ch.writeAndFlush(t.toBytes());
 	}
 
 }

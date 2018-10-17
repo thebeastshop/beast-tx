@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.alibaba.fastjson.JSON;
+import com.thebeastshop.tx.network.HasBytes;
 import com.thebeastshop.tx.network.config.ServerConfig;
 import com.thebeastshop.tx.network.server.NetworkServer;
 import com.thebeastshop.tx.network.server.NetworkServerHandler;
@@ -23,7 +24,7 @@ public class Application {
 			ServerConfig config = new ServerConfig();
 			config.setHandler(new NetworkServerHandler() {
 				@Override
-				public Object receive(byte[] dataBytes) {
+				public HasBytes receive(byte[] dataBytes) {
 					Record record = JSON.parseObject(dataBytes, Record.class);
 					System.out.println("存储数据：" + JSON.toJSONString(record));
 					Record reply = new Record();

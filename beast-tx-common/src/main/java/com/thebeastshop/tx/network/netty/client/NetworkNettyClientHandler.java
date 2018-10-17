@@ -11,12 +11,14 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.thebeastshop.tx.network.client.NetworkClientHandler;
 
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
  * 
  */
+@Sharable
 public class NetworkNettyClientHandler extends SimpleChannelInboundHandler<byte[]> {
 
 	public NetworkClientHandler handler;

@@ -17,7 +17,7 @@ import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.server.intf.ServerAioHandler;
 
-import com.alibaba.fastjson.JSON;
+import com.thebeastshop.tx.network.HasBytes;
 import com.thebeastshop.tx.network.server.NetworkServerHandler;
 import com.thebeastshop.tx.network.tio.NetworkPacket;
 import com.thebeastshop.tx.network.tio.TioCoder;
@@ -44,10 +44,10 @@ public class NetworkServerAioHandler implements ServerAioHandler {
 		NetworkPacket storagePacket = (NetworkPacket) packet;
 		byte[] body = storagePacket.getBody();
 		if (ArrayUtils.isNotEmpty(body) && handler != null) {
-			Object reply = handler.receive(body);
+			HasBytes reply = handler.receive(body);
 			if (reply != null) {
 				NetworkPacket replyPacket = new NetworkPacket();
-				replyPacket.setBody(JSON.toJSONString(reply).getBytes());
+				replyPacket.setBody(reply.toBytes());
 				Tio.send(channelContext, replyPacket);
 			}
 		}
