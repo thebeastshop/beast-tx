@@ -7,10 +7,13 @@
  */
 package com.thebeastshop.tx.vo;
 
+import com.alibaba.fastjson.JSON;
+import com.thebeastshop.tx.network.HasBytes;
+
 /**
  * 
  */
-public class Record {
+public class Record implements HasBytes {
 
 	private long txId;
 
@@ -20,6 +23,11 @@ public class Record {
 
 	public void setTxId(long txId) {
 		this.txId = txId;
+	}
+
+	@Override
+	public byte[] toBytes() {
+		return JSON.toJSONString(this).getBytes();
 	}
 
 }

@@ -7,6 +7,7 @@
  */
 package com.thebeastshop.tx.network.client;
 
+import com.thebeastshop.tx.network.HasBytes;
 import com.thebeastshop.tx.network.config.ClientConfig;
 
 /**
@@ -16,6 +17,6 @@ public interface NetworkClient {
 
 	NetworkClient initClient(ClientConfig config);
 
-	<T> void send(T t);
+	void send(HasBytes t);
 
 }

@@ -7,12 +7,12 @@
  */
 package com.thebeastshop.tx.network.config;
 
-import com.thebeastshop.tx.network.client.NetworkClientHandler;
+import com.thebeastshop.tx.network.server.NetworkServerHandler;
 
 /**
  * 
  */
-public class ClientConfig {
+public class ServerConfig {
 
 	private String ip = "127.0.0.1";
 
@@ -20,7 +20,7 @@ public class ClientConfig {
 
 	private int timeout = 5000;
 
-	private NetworkClientHandler handler;
+	private NetworkServerHandler handler;
 
 	public String getIp() {
 		return ip;
@@ -46,11 +46,11 @@ public class ClientConfig {
 		this.timeout = timeout;
 	}
 
-	public NetworkClientHandler getHandler() {
+	public NetworkServerHandler getHandler() {
 		return handler;
 	}
 
-	public void setHandler(NetworkClientHandler handler) {
+	public void setHandler(NetworkServerHandler handler) {
 		this.handler = handler;
 	}
 
