@@ -46,10 +46,11 @@ public class StorageClientAioHandler implements ClientAioHandler {
 	@Override
 	public void handler(Packet packet, ChannelContext channelContext) throws Exception {
 		StoragePacket storagePacket = (StoragePacket) packet;
-		HandlerCallback callback = callbackMap.get(storagePacket.getSeq());
+		HandlerCallback callback = callbackMap.get(storagePacket.getCallbackSeq());
 		byte[] body = storagePacket.getBody();
 		if (ArrayUtils.isNotEmpty(body) && callback != null) {
 			callback.doCallback(body);
+			callbackMap.remove(storagePacket.getCallbackSeq());
 		}
 	}
 

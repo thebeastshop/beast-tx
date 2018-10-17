@@ -46,7 +46,7 @@ public class TioCoder {
 		buffer.putInt(bodyLen);
 
 		// 写入消息类型
-		buffer.putLong(helloPacket.getSeq());
+		buffer.putLong(helloPacket.getCallbackSeq());
 		
 		// 写入消息体
 		if (body != null) {
@@ -87,7 +87,7 @@ public class TioCoder {
 		
 		// 组包成功
 		StoragePacket imPacket = new StoragePacket();
-		imPacket.setSeq(buffer.getLong());
+		imPacket.setCallbackSeq(buffer.getLong());
 		byte[] dst = new byte[bodyLength];
 		buffer.get(dst);
 		imPacket.setBody(dst);

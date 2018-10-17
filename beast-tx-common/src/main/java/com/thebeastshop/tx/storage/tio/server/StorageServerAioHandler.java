@@ -47,7 +47,7 @@ public class StorageServerAioHandler implements ServerAioHandler {
 			Object reply = handler.receive(body);
 			if (reply != null) {
 				StoragePacket replyPacket = new StoragePacket();
-				replyPacket.setSeq(storagePacket.getSeq());
+				replyPacket.setCallbackSeq(storagePacket.getCallbackSeq());
 				replyPacket.setBody(JSON.toJSONString(reply).getBytes());
 				Tio.send(channelContext, replyPacket);
 			}

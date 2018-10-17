@@ -57,7 +57,7 @@ public class StorageTioClient implements StorageClient {
 		StoragePacket packet = new StoragePacket();
 		Long seq = UniqueIdGenerator.generateId();
 		tioClientHandler.callbackMap.put(seq, callback);
-		packet.setSeq(seq);
+		packet.setCallbackSeq(seq);
 		packet.setBody(JSON.toJSONString(t).getBytes());
 		Tio.send(clientChannelContext, packet);
 
