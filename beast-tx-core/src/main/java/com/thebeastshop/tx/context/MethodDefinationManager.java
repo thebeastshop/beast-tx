@@ -37,7 +37,7 @@ public class MethodDefinationManager {
             if(getMethodType(m).equals(TccMethodTypeEnum.CONFIRM)){
                 Method tryMethod = findTryMethod(m,methods);
                 Method cancelMethod = findCancelMethod(m,methods);
-                log.info("register beastTx method[{}.{}], its try-method:{},its cancel-method:{}],",
+                log.info("[BEAST-TX]注册方法[{}.{}], TRY方法:[{}],CANCEL方法:[{}],",
                         clazz.getName(),
                         m.getName(),
                         tryMethod == null?null:tryMethod.getName(),

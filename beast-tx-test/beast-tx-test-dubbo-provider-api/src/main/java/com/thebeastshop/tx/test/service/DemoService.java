@@ -14,6 +14,8 @@ public interface DemoService {
     String test1(String name);
 
     String test2(String name, Integer age);
+
+    String test3(Long id);
 	
 	void cancelTest1(String str);
 	

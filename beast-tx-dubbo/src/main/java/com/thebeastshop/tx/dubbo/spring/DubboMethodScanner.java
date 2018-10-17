@@ -35,12 +35,13 @@ public class DubboMethodScanner implements BeanPostProcessor,PriorityOrdered, Ap
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if(ReferenceBean.class.isAssignableFrom(bean.getClass())){
+            ReferenceBean referenceBean = (ReferenceBean)bean;
             try {
                 //给dubbo设置filter
                 Method method = bean.getClass().getMethod("setFilter",String.class);
                 MethodUtil.invokeMethod(method,bean,new Object[]{"litxFilter"});
                 //注册进方法定义管理器
-                MethodDefinationManager.registerMethod(bean.getClass());
+                MethodDefinationManager.registerMethod(referenceBean.getObjectType());
             } catch (Exception e) {
                 String errorMsg = "[BEAST-TX]扫描DUBBO接口的时候发生了异常";
                 log.error(errorMsg,e);
