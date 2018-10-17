@@ -14,12 +14,16 @@ import com.thebeastshop.tx.context.TxContext;
 import com.thebeastshop.tx.context.content.InvokeContent;
 import com.thebeastshop.tx.context.content.MethodContent;
 import com.thebeastshop.tx.dubbo.invoke.DubboInvokeContent;
+import com.thebeastshop.tx.dubbo.spring.DubboMethodScanner;
 import com.thebeastshop.tx.enums.TxTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+import sun.plugin2.message.Message;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 
 /**
  * DUBBO调用拦截器
@@ -30,33 +34,57 @@ public class DubboTxFilter implements Filter {
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        Result result = invoker.invoke(invocation);
-
         TxContext txContext = null;
         if(TransactionSynchronizationManager.hasResource(TxConstant.TRANSACTION_CONTEXT_KEY)){
             txContext = (TxContext)TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_CONTEXT_KEY);
         }
-
-        if(txContext == null){
-            return result;
-        }
-
-        TxTypeEnum txType = txContext.getTxType();
 
         Method method = null;
         try {
             method = getInvokeMethod(invoker, invocation);
         } catch (NoSuchMethodException e) {
             log.error("找不到DUBBO方法[{}]",invocation.getMethodName());
-            return result;
+            throw new RpcException();
         }
 
         MethodContent methodContent = MethodDefinationManager.getMethodCentent(method);
+
+        if(methodContent != null &&
+                methodContent.getMethodContentState().equals(MethodContent.MethodContentState.TCC)){
+            log.info("[BEAST-TX]事务ID[{}],开始执行接口[{}]的TRY方法[{}]",
+                    txContext.getTxId(),
+                    invoker.getInterface().getName(),
+                    methodContent.getTryMethod().getName());
+            Object bean = DubboMethodScanner.getApplicationContext().getBean(invoker.getInterface());
+            try {
+                boolean tryFlag = (Boolean) methodContent.getTryMethod().invoke(bean,invocation.getArguments());
+                if(!tryFlag){
+                    String errorMsg = MessageFormat.format("[BEAST-TX]事务ID[{0}],执行接口[{1}]的TRY方法[{2}]出现异常",
+                            txContext.getTxId(),
+                            invoker.getInterface().getName(),
+                            methodContent.getTryMethod().getName());
+                    throw new RpcException(errorMsg);
+                }
+            } catch (Exception e) {
+                String errorMsg = MessageFormat.format("[BEAST-TX]事务ID[{0}],执行接口[{1}]的TRY方法[{2}]出现异常",
+                        txContext.getTxId(),
+                        invoker.getInterface().getName(),
+                        methodContent.getTryMethod().getName());
+                throw new RpcException(errorMsg);
+            }
+        }
+
+        Result result = invoker.invoke(invocation);
+
+        if(txContext == null){
+            return result;
+        }
 
         if(methodContent == null){
             return result;
         }
 
+        TxTypeEnum txType = txContext.getTxType();
         if(txType.equals(TxTypeEnum.TCC)){
             if(result == null || result.hasException()){
                 return result;

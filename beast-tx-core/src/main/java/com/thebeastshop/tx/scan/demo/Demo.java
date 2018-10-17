@@ -14,7 +14,7 @@ public class Demo implements IDemo{
         System.out.println("test1");
     }
 
-    public void test1(String name){
+    public void test1(String name,String address){
         System.out.println("test1 overload");
     }
 

@@ -11,8 +11,12 @@ import com.thebeastshop.tx.context.content.InvokeContent;
 import com.thebeastshop.tx.context.content.MethodContent;
 import com.thebeastshop.tx.dubbo.spring.DubboMethodScanner;
 import com.thebeastshop.tx.exceptions.RollbackException;
+import com.thebeastshop.tx.scan.demo.Demo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
 /**
@@ -27,11 +31,24 @@ public class DubboInvokeContent extends InvokeContent {
         if(this.getMethodContent().getMethodContentState().equals(MethodContent.MethodContentState.CC)
                 || this.getMethodContent().getMethodContentState().equals(MethodContent.MethodContentState.TCC)){
             Object bean = DubboMethodScanner.getApplicationContext().getBean(this.getInterfaceClass());
+
             try {
                 log.info("[BEAST-TX]事务ID[{}]，开始调用接口[{}]的回滚方法[{}]",
                         this.getTxId(),this.getInterfaceClass().getName(),
                         this.getMethodContent().getCancelMethod().getName());
-                this.getMethodContent().getCancelMethod().invoke(bean,this.getArgs());
+                try {
+                    this.getMethodContent().getCancelMethod().invoke(bean, this.getArgs());
+                } catch (IllegalArgumentException e){
+                    try{
+                        this.getMethodContent().getCancelMethod().invoke(bean,this.getArgs(),this.getResult());
+                    }catch (Exception e1){
+                        throw e1;
+                    }
+                } catch (IllegalAccessException e) {
+                    throw e;
+                } catch (InvocationTargetException e) {
+                    throw e;
+                }
             } catch (Exception e) {
                 String errorMsg = MessageFormat.format("[BEAST-TX]事务ID[{0}],调用接口[{1}]的回滚方法[{2}]产生异常",
                         this.getTxId(),
