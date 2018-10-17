@@ -18,7 +18,7 @@ import org.tio.core.GroupContext;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 
-import com.thebeastshop.tx.storage.HandlerCallback;
+import com.thebeastshop.tx.storage.client.HandlerCallback;
 import com.thebeastshop.tx.storage.tio.StoragePacket;
 import com.thebeastshop.tx.storage.tio.TioCoder;
 

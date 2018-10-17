@@ -7,8 +7,6 @@
  */
 package com.thebeastshop.tx.storage.client;
 
-import com.thebeastshop.tx.storage.HandlerCallback;
-
 /**
  * 记录存储客户端
  */

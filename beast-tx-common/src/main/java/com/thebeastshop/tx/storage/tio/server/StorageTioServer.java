@@ -11,8 +11,8 @@ import org.tio.server.ServerGroupContext;
 import org.tio.server.TioServer;
 import org.tio.server.intf.ServerAioListener;
 
-import com.thebeastshop.tx.storage.HandlerCallback;
 import com.thebeastshop.tx.storage.server.StorageServer;
+import com.thebeastshop.tx.storage.server.StorageServerHandler;
 
 /**
  * 用t-io通信框架实现记录存储服务端
@@ -40,9 +40,9 @@ public class StorageTioServer implements StorageServer {
 	public static final int timeout = 5000;
 
 	@Override
-	public void start(HandlerCallback callback) {
+	public void start(StorageServerHandler handler) {
 		try {
-			aioHandler.callback = callback;
+			aioHandler.handler = handler;
 			serverGroupContext.setHeartbeatTimeout(timeout);
 			tioServer.start(serverIp, serverPort);
 		} catch (Exception e) {

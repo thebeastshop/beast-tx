@@ -13,7 +13,6 @@
 		<mybatis.spring.boot.version>1.2.2</mybatis.spring.boot.version>
 		<spring-boot.version>1.5.17.RELEASE</spring-boot.version>
 		<beast-tx-common.version>1.0.0-SNAPSHOT</beast-tx-common.version>
-		<mysql.version>5.1.41</mysql.version>
 	</properties>
 
 	<dependencyManagement>
@@ -38,19 +37,12 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>${mybatis.spring.boot.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
 		</dependency>
 
 		<dependency>
@@ -64,6 +56,29 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<profiles.active>dev</profiles.active>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<profiles.active>test</profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<profiles.active>prod</profiles.active>
+			</properties>
+		</profile>
+	</profiles>
 
 	<build>
 		<resources>
