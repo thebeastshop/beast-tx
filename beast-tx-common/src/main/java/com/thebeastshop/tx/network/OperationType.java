@@ -5,7 +5,7 @@
  * @email xiongleipaul@gmail.com
  * @Date 2018年10月12日
  */
-package com.thebeastshop.tx.storage;
+package com.thebeastshop.tx.network;
 
 /**
  * 操作类型

@@ -5,16 +5,16 @@
  * @email xiongleipaul@gmail.com
  * @Date 2018年10月12日
  */
-package com.thebeastshop.tx.storage.server;
+package com.thebeastshop.tx.network.server;
 
 /**
- * 记录存储服务端
+ * 服务端
  */
-public interface StorageServer {
+public interface NetworkServer {
 	/**
 	 * 启动程序入口
 	 * 
 	 * @param handler
 	 */
-	void start(StorageServerHandler handler);
+	void start(NetworkServerHandler handler);
 }

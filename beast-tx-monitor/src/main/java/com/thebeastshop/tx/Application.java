@@ -7,8 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.alibaba.fastjson.JSON;
-import com.thebeastshop.tx.storage.server.StorageServer;
-import com.thebeastshop.tx.storage.server.StorageServerHandler;
+import com.thebeastshop.tx.network.server.NetworkServer;
+import com.thebeastshop.tx.network.server.NetworkServerHandler;
 import com.thebeastshop.tx.vo.Record;
 
 @SpringBootApplication
@@ -17,9 +17,9 @@ public class Application {
 
 	public static void main(String[] args) {
 		// -------启动记录存储服务端-------
-		ServiceLoader<StorageServer> loader = ServiceLoader.load(StorageServer.class);
+		ServiceLoader<NetworkServer> loader = ServiceLoader.load(NetworkServer.class);
 		if (loader != null && loader.iterator().hasNext()) {
-			loader.iterator().next().start(new StorageServerHandler() {
+			loader.iterator().next().start(new NetworkServerHandler() {
 				@Override
 				public Object receive(byte[] dataBytes) {
 					Record record = JSON.parseObject(dataBytes, Record.class);

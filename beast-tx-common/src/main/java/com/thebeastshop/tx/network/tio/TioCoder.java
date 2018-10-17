@@ -5,7 +5,7 @@
  * @email xiongleipaul@gmail.com
  * @Date 2018年10月12日
  */
-package com.thebeastshop.tx.storage.tio;
+package com.thebeastshop.tx.network.tio;
 
 import java.nio.ByteBuffer;
 
@@ -27,16 +27,15 @@ public class TioCoder {
 	 * 消息体结构：   对象的json串的byte[]
 	 */
 	public static ByteBuffer encode(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
-		StoragePacket helloPacket = (StoragePacket) packet;
+		NetworkPacket helloPacket = (NetworkPacket) packet;
 		
 		byte[] body = helloPacket.getBody();
 		int bodyLen = 0;
 		if (body != null) {
 			bodyLen = body.length;
 		}
-		int seqLen = 8;
 		// bytebuffer的总长度是 = 消息头的长度 + 消息体的长度
-		int allLen = StoragePacket.HEADER_LENGHT + seqLen + bodyLen;
+		int allLen = NetworkPacket.HEADER_LENGHT + bodyLen;
 		// 创建一个新的bytebuffer
 		ByteBuffer buffer = ByteBuffer.allocate(allLen);
 		// 设置字节序
@@ -44,9 +43,6 @@ public class TioCoder {
 
 		// 写入消息头----消息头的内容就是消息体的长度
 		buffer.putInt(bodyLen);
-
-		// 写入消息类型
-		buffer.putLong(helloPacket.getCallbackSeq());
 		
 		// 写入消息体
 		if (body != null) {
@@ -62,9 +58,9 @@ public class TioCoder {
 	 * 消息类型结构： 1个字节，对应枚举类型
 	 * 消息体结构：   对象的json串的byte[]
 	 */
-	public static StoragePacket decode(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
+	public static NetworkPacket decode(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
 		// 收到的数据组不了业务包，则返回null以告诉框架数据不够
-		if (readableLength < StoragePacket.HEADER_LENGHT) {
+		if (readableLength < NetworkPacket.HEADER_LENGHT) {
 			return null;
 		}
 
@@ -77,7 +73,7 @@ public class TioCoder {
 		}
 
 		// 计算本次需要的数据长度
-		int neededLength = StoragePacket.HEADER_LENGHT + bodyLength;
+		int neededLength = NetworkPacket.HEADER_LENGHT + bodyLength;
 		// 收到的数据是否足够组包
 		int isDataEnough = readableLength - neededLength;
 		// 不够消息体长度(剩下的buffe组不了消息体)
@@ -86,8 +82,7 @@ public class TioCoder {
 		}
 		
 		// 组包成功
-		StoragePacket imPacket = new StoragePacket();
-		imPacket.setCallbackSeq(buffer.getLong());
+		NetworkPacket imPacket = new NetworkPacket();
 		byte[] dst = new byte[bodyLength];
 		buffer.get(dst);
 		imPacket.setBody(dst);

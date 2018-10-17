@@ -5,23 +5,14 @@
  * @email xiongleipaul@gmail.com
  * @Date 2018年10月12日
  */
-package com.thebeastshop.tx.storage.tio;
+package com.thebeastshop.tx.network.tio;
 
 import org.tio.core.intf.Packet;
 
-public class StoragePacket extends Packet {
+public class NetworkPacket extends Packet {
 	private static final long serialVersionUID = 1L;
 	public static final int HEADER_LENGHT = 4;// 消息头的长度
-	private long callbackSeq;
 	private byte[] body;
-
-	public long getCallbackSeq() {
-		return callbackSeq;
-	}
-
-	public void setCallbackSeq(long callbackSeq) {
-		this.callbackSeq = callbackSeq;
-	}
 
 	public byte[] getBody() {
 		return body;
