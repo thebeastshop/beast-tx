@@ -5,21 +5,21 @@
  * @email xiongleipaul@gmail.com
  * @Date 2018年10月12日
  */
-package com.thebeastshop.tx.storage.tio.server;
+package com.thebeastshop.tx.network.tio.server;
 
 import org.tio.server.ServerGroupContext;
 import org.tio.server.TioServer;
 import org.tio.server.intf.ServerAioListener;
 
-import com.thebeastshop.tx.storage.server.StorageServer;
-import com.thebeastshop.tx.storage.server.StorageServerHandler;
+import com.thebeastshop.tx.network.server.NetworkServer;
+import com.thebeastshop.tx.network.server.NetworkServerHandler;
 
 /**
  * 用t-io通信框架实现记录存储服务端
  */
-public class StorageTioServer implements StorageServer {
+public class NetworkTioServer implements NetworkServer {
 	// handler, 包括编码、解码、消息处理
-	public static StorageServerAioHandler aioHandler = new StorageServerAioHandler();
+	public static NetworkServerAioHandler aioHandler = new NetworkServerAioHandler();
 
 	// 事件监听器，可以为null，但建议自己实现该接口，可以参考showcase了解些接口
 	public static ServerAioListener aioListener = null;
@@ -40,7 +40,7 @@ public class StorageTioServer implements StorageServer {
 	public static final int timeout = 5000;
 
 	@Override
-	public void start(StorageServerHandler handler) {
+	public void start(NetworkServerHandler handler) {
 		try {
 			aioHandler.handler = handler;
 			serverGroupContext.setHeartbeatTimeout(timeout);

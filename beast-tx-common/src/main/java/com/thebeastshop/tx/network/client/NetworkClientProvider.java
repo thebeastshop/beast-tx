@@ -5,23 +5,25 @@
  * @email xiongleipaul@gmail.com
  * @Date 2018年10月12日
  */
-package com.thebeastshop.tx.storage.client;
+package com.thebeastshop.tx.network.client;
 
 import java.util.ServiceLoader;
+
+import com.thebeastshop.tx.network.config.ClientConfig;
 
 /**
  * 存储客户端提供者
  */
-public class StorageClientProvider {
+public class NetworkClientProvider {
 	/**
 	 * 创建存储客户端
 	 * 
 	 * @return
 	 */
-	public static StorageClient create() {
-		ServiceLoader<StorageClient> loader = ServiceLoader.load(StorageClient.class);
+	public static NetworkClient create(ClientConfig config) {
+		ServiceLoader<NetworkClient> loader = ServiceLoader.load(NetworkClient.class);
 		if (loader != null && loader.iterator().hasNext()) {
-			return loader.iterator().next();
+			return loader.iterator().next().initClient(config);
 		}
 		return null;
 	}

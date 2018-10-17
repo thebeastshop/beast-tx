@@ -5,13 +5,13 @@
  * @email xiongleipaul@gmail.com
  * @Date 2018年10月16日
  */
-package com.thebeastshop.tx.storage.client;
+package com.thebeastshop.tx.network.server;
 
 /**
  * 
  */
-public interface HandlerCallback {
-	
-	void doCallback(byte[] dataBytes);
+public interface NetworkServerHandler {
+
+	Object receive(byte[] dataBytes);
 
 }
