@@ -16,7 +16,7 @@ import com.thebeastshop.tx.vo.Record;
 
 public class NetworkClientTest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		ClientConfig config = new ClientConfig();
 		config.setHandler(new NetworkClientHandler() {
 			@Override
@@ -24,11 +24,13 @@ public class NetworkClientTest {
 				Record record = JSON.parseObject(dataBytes, Record.class);
 				System.out.println("收到消息：" + JSON.toJSONString(record));
 			}
-		} );
-		NetworkClient client = NetworkClientProvider.create(config );
+		});
+		NetworkClient client = NetworkClientProvider.create(config);
 		Record record = new Record();
 		record.setTxId(1L);
 		client.send(record);
+		
+		System.in.read();
 	}
 
 }

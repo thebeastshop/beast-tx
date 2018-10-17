@@ -21,16 +21,15 @@ import com.thebeastshop.tx.network.config.ClientConfig;
 import com.thebeastshop.tx.network.tio.NetworkPacket;
 
 /**
- * 用t-io通信框架实现记录存储客户端
+ * 用t-io通信框架实现客户端
  */
 public class NetworkTioClient implements NetworkClient {
 
 	private ClientChannelContext clientChannelContext;
 
-	private NetworkClientAioHandler tioClientHandler = new NetworkClientAioHandler();
-
 	@Override
 	public NetworkClient initClient(ClientConfig config) {
+		NetworkClientAioHandler tioClientHandler = new NetworkClientAioHandler();
 		tioClientHandler.handler = config.getHandler();
 		ClientAioListener aioListener = null;
 		ReconnConf reconnConf = new ReconnConf(5000L);
@@ -51,7 +50,7 @@ public class NetworkTioClient implements NetworkClient {
 	public <T> void send(T t) {
 		NetworkPacket packet = new NetworkPacket();
 		packet.setBody(JSON.toJSONString(t).getBytes());
-		Tio.send(clientChannelContext, packet);		
+		Tio.send(clientChannelContext, packet);
 	}
 
 }

@@ -7,14 +7,18 @@
  */
 package com.thebeastshop.tx.network.server;
 
+import com.thebeastshop.tx.network.config.ServerConfig;
+
 /**
  * 服务端
  */
 public interface NetworkServer {
+
+	NetworkServer initServer(ServerConfig config);
+
 	/**
 	 * 启动程序入口
 	 * 
-	 * @param handler
 	 */
-	void start(NetworkServerHandler handler);
+	void start();
 }
