@@ -79,5 +79,6 @@ atlassian-ide-plugin.xml
 *.mymetadata
 /logs
 */logs
+/cache
 */cache
 
