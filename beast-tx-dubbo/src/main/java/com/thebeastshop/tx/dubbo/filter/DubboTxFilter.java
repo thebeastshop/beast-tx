@@ -47,7 +47,7 @@ public class DubboTxFilter implements Filter {
 
         MethodContent methodContent = MethodDefinationManager.getMethodCentent(method);
 
-        if(methodContent != null &&
+        if(txContext != null && methodContent != null &&
                 methodContent.getMethodContentState().equals(MethodContent.MethodContentState.TCC)){
             log.info("[BEAST-TX]事务ID[{}],开始执行接口[{}]的TRY方法[{}]",
                     txContext.getTxId(),

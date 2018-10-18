@@ -39,7 +39,7 @@ public class DubboMethodScanner implements BeanPostProcessor,PriorityOrdered, Ap
             try {
                 //给dubbo设置filter
                 Method method = bean.getClass().getMethod("setFilter",String.class);
-                MethodUtil.invokeMethod(method,bean,new Object[]{"litxFilter"});
+                MethodUtil.invokeMethod(method,bean,new Object[]{"txDubboFilter"});
                 //注册进方法定义管理器
                 MethodDefinationManager.registerMethod(referenceBean.getObjectType());
             } catch (Exception e) {

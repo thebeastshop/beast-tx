@@ -26,6 +26,9 @@ public class DemoServiceImpl implements DemoService {
     @Override
     public String test3(Long id) {
         System.out.println("test3");
+        if(1==1){
+            throw new RuntimeException("test error");
+        }
         return "hello,id:" + id;
     }
 
