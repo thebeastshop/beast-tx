@@ -23,7 +23,7 @@ import com.thebeastshop.tx.network.tio.NetworkPacket;
 /**
  * 用t-io通信框架实现客户端
  */
-public class NetworkTioClient implements NetworkClient {
+public class TioNetworkClient implements NetworkClient {
 
 	private ClientChannelContext clientChannelContext;
 

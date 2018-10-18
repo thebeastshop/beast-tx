@@ -17,7 +17,7 @@ import com.thebeastshop.tx.network.server.NetworkServer;
 /**
  * 用t-io通信框架实现服务端
  */
-public class NetworkTioServer implements NetworkServer {
+public class TioNetworkServer implements NetworkServer {
 
 	// tioServer对象
 	public static TioServer tioServer;
