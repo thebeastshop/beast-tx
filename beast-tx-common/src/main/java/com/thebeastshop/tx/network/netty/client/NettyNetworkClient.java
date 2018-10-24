@@ -25,7 +25,7 @@ import io.netty.handler.codec.bytes.ByteArrayEncoder;
 /**
  * 用netty通信框架实现客户端
  */
-public class NetworkNettyClient implements NetworkClient {
+public class NettyNetworkClient implements NetworkClient {
 	
 	private Channel ch;
 
@@ -33,7 +33,7 @@ public class NetworkNettyClient implements NetworkClient {
 	public NetworkClient initClient(ClientConfig config) {
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
-			final NetworkNettyClientHandler nettyClientHandler = new NetworkNettyClientHandler();
+			final NettyNetworkClientHandler nettyClientHandler = new NettyNetworkClientHandler();
 			nettyClientHandler.handler = config.getHandler();
 			Bootstrap b = new Bootstrap();
 			b.group(group).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {

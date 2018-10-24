@@ -25,7 +25,7 @@ import io.netty.handler.logging.LoggingHandler;
 /**
  * 用t-io通信框架实现服务端
  */
-public class NetworkNettyServer implements NetworkServer {
+public class NettyNetworkServer implements NetworkServer {
 
 	private int port = 6789;
 
@@ -36,7 +36,7 @@ public class NetworkNettyServer implements NetworkServer {
 
 	@Override
 	public NetworkServer initServer(final ServerConfig config) {
-		final NetworkNettyServerHandler nettyServerHandler = new NetworkNettyServerHandler();
+		final NettyNetworkServerHandler nettyServerHandler = new NettyNetworkServerHandler();
 		nettyServerHandler.handler = config.getHandler();
 		port = config.getPort();
 		bossGroup = new NioEventLoopGroup(1);

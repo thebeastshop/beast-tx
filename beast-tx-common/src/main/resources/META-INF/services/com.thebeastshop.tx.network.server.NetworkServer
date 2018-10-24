@@ -1,4 +1,4 @@
 # netty实现
-com.thebeastshop.tx.network.netty.server.NetworkNettyServer
+com.thebeastshop.tx.network.netty.server.NettyNetworkServer
 # t-io实现
-com.thebeastshop.tx.network.tio.server.NetworkTioServer
+com.thebeastshop.tx.network.tio.server.TioNetworkServer

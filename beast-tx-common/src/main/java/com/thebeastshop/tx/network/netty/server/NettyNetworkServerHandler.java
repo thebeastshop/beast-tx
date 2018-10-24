@@ -20,7 +20,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * 
  */
 @Sharable
-public class NetworkNettyServerHandler extends SimpleChannelInboundHandler<byte[]>{
+public class NettyNetworkServerHandler extends SimpleChannelInboundHandler<byte[]>{
 	
 	public NetworkServerHandler handler;
 
