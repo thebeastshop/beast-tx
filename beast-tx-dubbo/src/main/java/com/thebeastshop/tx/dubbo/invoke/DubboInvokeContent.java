@@ -11,12 +11,10 @@ import com.thebeastshop.tx.context.content.InvokeContent;
 import com.thebeastshop.tx.context.content.MethodContent;
 import com.thebeastshop.tx.dubbo.spring.DubboMethodScanner;
 import com.thebeastshop.tx.exceptions.RollbackException;
-import com.thebeastshop.tx.scan.demo.Demo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
 /**

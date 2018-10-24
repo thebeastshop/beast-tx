@@ -163,5 +163,6 @@
 		<module>beast-tx-test</module>
 		<module>beast-tx-dubbo</module>
         <module>beast-tx-common</module>
-    </modules>
+		<module>beast-tx-feign</module>
+	</modules>
 </project>

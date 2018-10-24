@@ -10,7 +10,6 @@ package com.thebeastshop.tx.dubbo.spring;
 import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.dubbo.exceptions.DubboMethodScanException;
-import com.thebeastshop.tx.proxy.TxTypeScanLogic;
 import com.thebeastshop.tx.utils.MethodUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,12 +46,6 @@ public class DubboMethodScanner implements BeanPostProcessor,PriorityOrdered, Ap
                 log.error(errorMsg,e);
                 throw new DubboMethodScanException(errorMsg);
             }
-        }
-
-        //进行TxType动态代理的逻辑
-        Object proxyObject = TxTypeScanLogic.loadInstance().process(bean);
-        if(proxyObject != null){
-            return proxyObject;
         }
         return bean;
     }

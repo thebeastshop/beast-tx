@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
-@Transactional
+
 @Service("testService")
 public class TestServiceImpl implements TestService {
 
@@ -22,6 +22,7 @@ public class TestServiceImpl implements TestService {
     private JdbcTemplate jdbcTemplate;
 
     @Override
+    @Transactional
     public void consumerTest() {
         jdbcTemplate.execute("insert into user (name, age) values ('beast-tx', '99131')");
 
