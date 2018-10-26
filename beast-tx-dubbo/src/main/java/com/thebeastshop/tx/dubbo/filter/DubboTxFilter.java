@@ -65,7 +65,7 @@ public class DubboTxFilter implements Filter {
                 }
             } catch (Exception e) {
                 String errorMsg = MessageFormat.format("[BEAST-TX]事务ID[{0}],执行接口[{1}]的TRY方法[{2}]出现异常",
-                        txContext.getTxId(),
+                        txContext.getTxId().toString(),
                         invoker.getInterface().getName(),
                         methodContent.getTryMethod().getName());
                 throw new RpcException(errorMsg);

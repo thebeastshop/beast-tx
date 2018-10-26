@@ -56,10 +56,12 @@ public class TxAspect {
             TxContext txContext = (TxContext) TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_CONTEXT_KEY);
             //如果为最终一致策略的时候。不进行回滚
             if(txContext.getTxType().equals(TxTypeEnum.TCC)){
-                log.info("[BEAST-TX]开始回滚事务，事务ID[{}]，事务策略类型[{}]",txContext.getTxId(),txContext.getTxType());
                 txContext.setTxContextState(TxContextStateEnum.ROLLBACKING);
                 try{
-                    txContext.rollback();
+                    if(txContext.needRollback()){
+                        log.info("[BEAST-TX]开始回滚事务，事务ID[{}]，事务策略类型[{}]",txContext.getTxId(),txContext.getTxType());
+                        txContext.rollback();
+                    }
                 }catch(RollbackException e){
                     log.error(e.getMessage());
                     txContext.setTxContextState(TxContextStateEnum.ROLLBACK_FAILED);

@@ -89,4 +89,9 @@ public class TxContext {
             invokeContent.rollback();
         }
     }
+
+    public boolean needRollback(){
+        return !invokeQueue.isEmpty();
+    }
+
 }
