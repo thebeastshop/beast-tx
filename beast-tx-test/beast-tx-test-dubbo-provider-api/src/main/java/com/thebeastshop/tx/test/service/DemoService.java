@@ -9,7 +9,7 @@ package com.thebeastshop.tx.test.service;
 
 public interface DemoService {
 
-	String tryTest1(String name);
+	boolean tryTest1(String name);
 	
     String test1(String name);
 

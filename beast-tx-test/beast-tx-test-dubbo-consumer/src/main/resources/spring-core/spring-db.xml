@@ -42,7 +42,7 @@
 	</bean>
 	
 	<!-- Spring事务管理器 -->
-	<bean name="transactionManager" class="com.thebeastshop.tx.transaction.TxTransactionManager">
+	<bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 

@@ -15,6 +15,7 @@
 	<context:component-scan base-package="com.thebeastshop.tx.test.consumer.aop" />
 
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<bean class="com.thebeastshop.tx.aop.TxAspect"/>
 
 	<bean class="com.thebeastshop.tx.dubbo.spring.DubboMethodScanner"/>
 

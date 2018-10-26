@@ -24,8 +24,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**

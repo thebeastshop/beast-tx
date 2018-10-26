@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 @Service("demoService")
 public class DemoServiceImpl implements DemoService {
     @Override
-    public String tryTest1(String name) {
+    public boolean tryTest1(String name) {
         System.out.println("tryTest1");
-        return "hello," + name;
+        return true;
     }
 
     @Override

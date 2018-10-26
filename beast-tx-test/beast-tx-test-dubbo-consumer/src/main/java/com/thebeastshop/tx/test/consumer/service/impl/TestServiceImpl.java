@@ -1,5 +1,6 @@
 package com.thebeastshop.tx.test.consumer.service.impl;
 
+import com.thebeastshop.tx.annotation.BeastTx;
 import com.thebeastshop.tx.test.consumer.service.TestService;
 import com.thebeastshop.tx.test.service.DemoService;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     @Transactional
+    @BeastTx
     public void consumerTest() {
         jdbcTemplate.execute("insert into user (name, age) values ('beast-tx', '99131')");
 
