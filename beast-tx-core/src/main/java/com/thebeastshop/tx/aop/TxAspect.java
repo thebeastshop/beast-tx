@@ -49,7 +49,9 @@ public class TxAspect {
                     TxContextStateEnum.INIT);
             TransactionSynchronizationManager.bindResource(TxConstant.TRANSACTION_CONTEXT_KEY, txContext);
             log.info("[BEAST-TX]开启事务，事务ID[{}],事务策略类型[{}]",txContext.getTxId(),txContext.getTxType().getValue());
+
             Object result = jp.proceed();
+            txContext.setTxContextState(TxContextStateEnum.SUCCESS);
             return result;
         } catch (Throwable t) {
             log.error("[BEAST-TX]事务调用发生错误",t);
