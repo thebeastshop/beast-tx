@@ -8,17 +8,23 @@
 package com.thebeastshop.tx.dubbo.spring;
 
 import com.alibaba.dubbo.config.spring.ReferenceBean;
+import com.thebeastshop.tx.aop.TxAspect;
 import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.dubbo.exceptions.DubboMethodScanException;
 import com.thebeastshop.tx.utils.MethodUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
+import org.springframework.core.type.AnnotationMetadata;
 
 import java.lang.reflect.Method;
 

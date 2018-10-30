@@ -63,8 +63,10 @@ public class TxAspect {
                     if(txContext.needRollback()){
                         log.info("[BEAST-TX]开始回滚事务，事务ID[{}]，事务策略类型[{}]",txContext.getTxId(),txContext.getTxType());
                         txContext.rollback();
+                        log.info("[BEAST-TX]回滚事务[{}]成功",txContext.getTxId());
                     }
                 }catch(RollbackException e){
+                    log.info("[BEAST-TX]回滚事务[{}]失败",txContext.getTxId());
                     log.error(e.getMessage());
                     txContext.setTxContextState(TxContextStateEnum.ROLLBACK_FAILED);
                 }
