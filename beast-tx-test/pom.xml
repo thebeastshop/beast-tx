@@ -142,6 +142,7 @@
 		<module>beast-tx-test-socket</module>
 		<module>beast-tx-test-springcloud-provider</module>
 		<module>beast-tx-test-springcloud-eureka</module>
-	</modules>
+        <module>beast-tx-test-springcloud-consumer</module>
+    </modules>
 
 </project>
