@@ -16,7 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,11 +28,14 @@ public class MethodDefinationManager {
 
     private static final Logger log = LoggerFactory.getLogger(MethodDefinationManager.class);
 
+    private static List<Class> registerClassList = new ArrayList<>();
+
     private static Map<String, MethodContent> methodContentMap = new HashMap<>();
 
     private static CancelInvokeHook cancelInvokeHook;
 
     public static void registerMethod(Class clazz){
+        registerClassList.add(clazz);
         Method[] methods = MethodUtil.getOwnPublicMethod(clazz);
         MethodContent methodContent = null;
         for(Method m : methods){
@@ -47,6 +52,10 @@ public class MethodDefinationManager {
                 methodContentMap.put(MethodUtil.getMethodKey(m),methodContent);
             }
         }
+    }
+
+    public static boolean hasRegister(Class clazz) {
+        return registerClassList.contains(clazz);
     }
 
     public static MethodContent getMethodCentent(Method m){
