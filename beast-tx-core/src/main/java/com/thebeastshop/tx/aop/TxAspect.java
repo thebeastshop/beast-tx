@@ -23,6 +23,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import java.lang.reflect.Method;
 
@@ -30,9 +33,11 @@ import java.lang.reflect.Method;
  * BeastTx注解切面
  */
 @Aspect
-public class TxAspect {
+public class TxAspect implements ApplicationContextAware {
 
     private final Logger log = LoggerFactory.getLogger(TxAspect.class);
+
+    private static ApplicationContext applicationContext = null;
 
     @Pointcut("@annotation(com.thebeastshop.tx.annotation.BeastTx)")
     public void cut(){}
@@ -76,5 +81,14 @@ public class TxAspect {
         }finally {
             TransactionSynchronizationManager.unbindResource(TxConstant.TRANSACTION_CONTEXT_KEY);
         }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        TxAspect.applicationContext = applicationContext;
+    }
+
+    public static ApplicationContext getApplicationContext(){
+        return TxAspect.applicationContext;
     }
 }

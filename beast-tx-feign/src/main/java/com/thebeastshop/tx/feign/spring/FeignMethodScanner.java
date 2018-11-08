@@ -19,6 +19,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * spring cloud Feign的方法扫描器
+ */
 public class FeignMethodScanner implements InitializingBean, ApplicationContextAware {
 
     private final Logger log = LoggerFactory.getLogger(FeignMethodScanner.class);

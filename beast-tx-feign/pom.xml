@@ -103,17 +103,16 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.poolik</groupId>
+            <artifactId>classfinder</artifactId>
+            <version>${classfinder.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-feign</artifactId>
             <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>com.poolik</groupId>
-            <artifactId>classfinder</artifactId>
-            <version>${classfinder.version}</version>
         </dependency>
     </dependencies>
 

@@ -13,7 +13,6 @@ import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.context.TxContext;
 import com.thebeastshop.tx.context.content.InvokeContent;
 import com.thebeastshop.tx.context.content.MethodContent;
-import com.thebeastshop.tx.dubbo.invoke.DubboInvokeContent;
 import com.thebeastshop.tx.dubbo.spring.DubboMethodScanner;
 import com.thebeastshop.tx.enums.TxTypeEnum;
 import org.slf4j.Logger;
@@ -109,12 +108,12 @@ public class DubboTxFilter implements Filter {
                                            MethodContent methodContent, TxContext txContext,Result result){
         Class interfaceClass = invoker.getInterface();
 
-        InvokeContent invokeContent = new DubboInvokeContent();
+        InvokeContent invokeContent = new InvokeContent();
         invokeContent.setInterfaceClass(interfaceClass);
         invokeContent.setTxId(txContext.getTxId());
         invokeContent.setTxType(txContext.getTxType());
         invokeContent.setArgs(invocation.getArguments());
-        invokeContent.setResult(result);
+        invokeContent.setResult(result.getValue());
         invokeContent.setMethodContent(methodContent);
         return invokeContent;
     }
