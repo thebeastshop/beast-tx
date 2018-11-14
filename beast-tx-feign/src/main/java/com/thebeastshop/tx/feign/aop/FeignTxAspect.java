@@ -22,19 +22,17 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
-@Component
 @Aspect
 public class FeignTxAspect {
 
     private final static Logger log = LoggerFactory.getLogger(FeignTxAspect.class);
 
-    @Pointcut("@within(org.springframework.cloud.netflix.feign.FeignClient)")
+    @Pointcut("@within(org.springframework.cloud.openfeign.FeignClient)")
     public void cut(){}
 
     @Around("cut()")

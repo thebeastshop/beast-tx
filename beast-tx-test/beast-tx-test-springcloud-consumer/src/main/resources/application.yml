@@ -1,6 +1,11 @@
 spring:
   application:
     name: consumer
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3366/test?useUnicode=true&characterEncoding=utf-8&connectTimeout=6000&socketTimeout=6000&autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true
+    username: root
+    password: 123456
 server:
   port: 2002
 eureka:

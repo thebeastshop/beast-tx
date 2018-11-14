@@ -13,9 +13,8 @@
     </parent>
 
     <properties>
-        <spring-boot.version>1.5.13.RELEASE</spring-boot.version>
-        <spring-cloud.version>Dalston.SR5</spring-cloud.version>
-        <classfinder.version>1.0</classfinder.version>
+        <spring-boot.version>2.0.5.RELEASE</spring-boot.version>
+        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
     </properties>
 
     <dependencies>
@@ -104,15 +103,8 @@
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.poolik</groupId>
-            <artifactId>classfinder</artifactId>
-            <version>${classfinder.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
-            <optional>true</optional>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
     </dependencies>
 

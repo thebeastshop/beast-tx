@@ -1,5 +1,6 @@
 package com.thebeastshop.tx.test.sc.consumer.controller;
 
+import com.thebeastshop.tx.test.sc.consumer.domain.ConsumerDomain;
 import com.thebeastshop.tx.test.sc.consumer.feign.TxTestSayhiFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class TxTestConsumerController {
 
     @Autowired
-    private TxTestSayhiFeignClient txTestSayhiFeignClient;
+    private ConsumerDomain consumerDomain;
 
     @RequestMapping("/hi")
     public String sayHello(@RequestParam String name){
-        return txTestSayhiFeignClient.sayHello(name);
+        return consumerDomain.doTest(name);
     }
 }
