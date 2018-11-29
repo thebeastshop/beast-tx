@@ -1,6 +1,6 @@
 /**
  * <p>Title: beast-tx</p>
- * <p>Description: 分布式事务框架，基于本地事务表模型，支持最终一致事务，TCC事务的事务框架平台</p>
+ * <p>Description: 分布式事务框架，基于TCC事务的事务框架监控跟踪平台</p>
  * @author Bryan.Zhang
  * @email weenyc31@163.com
  * @Date 2018/9/30
@@ -9,7 +9,6 @@ package com.thebeastshop.tx.context;
 
 import com.thebeastshop.tx.context.content.InvokeContent;
 import com.thebeastshop.tx.enums.TxContextStateEnum;
-import com.thebeastshop.tx.enums.TxTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,16 +25,13 @@ public class TxContext {
 
     private Long txId;
 
-    private TxTypeEnum txType;
-
     private TxContextStateEnum txContextState;
 
     private final ConcurrentLinkedDeque<InvokeContent> invokeQueue = new ConcurrentLinkedDeque<>();
 
-    public TxContext(String nodeId, Long txId, TxTypeEnum txType, TxContextStateEnum txContextState) {
+    public TxContext(String nodeId, Long txId, TxContextStateEnum txContextState) {
         this.nodeId = nodeId;
         this.txId = txId;
-        this.txType = txType;
         this.txContextState = txContextState;
     }
 
@@ -59,14 +55,6 @@ public class TxContext {
         this.invokeQueue.add(invokeContent);
     }
 
-    public TxTypeEnum getTxType() {
-        return txType;
-    }
-
-    public void setTxType(TxTypeEnum txType) {
-        this.txType = txType;
-    }
-
     public TxContextStateEnum getTxContextState() {
         return txContextState;
     }
@@ -76,10 +64,9 @@ public class TxContext {
     }
 
     public void logInvokeContent(InvokeContent invokeContent){
-        log.info("[BEAST-TX]事务ID[{}]记录RPC方法[{}],这个调用的策略状态为[{}]",
+        log.info("[BEAST-TX]事务ID[{}]记录RPC方法[{}]",
                 this.getTxId(),
-                invokeContent.getMethodContent().getConfirmMethod().getName(),
-                invokeContent.getTxType().getValue());
+                invokeContent.getMethodContent().getConfirmMethod().getName());
         invokeQueue.add(invokeContent);
     }
 

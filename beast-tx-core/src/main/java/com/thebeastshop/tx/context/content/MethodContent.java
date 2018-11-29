@@ -1,6 +1,6 @@
 /**
  * <p>Title: beast-tx</p>
- * <p>Description: 分布式事务框架，基于本地事务表模型，支持最终一致事务，TCC事务的事务框架平台</p>
+ * <p>Description: 分布式事务框架，基于TCC事务的事务框架监控跟踪平台</p>
  * @author Bryan.Zhang
  * @email weenyc31@163.com
  * @Date 2018/10/7
@@ -52,8 +52,10 @@ public class MethodContent {
     }
 
     public MethodContentState getMethodContentState(){
-        if(confirmMethod != null && cancelMethod != null && tryMethod == null){
+        if(confirmMethod != null && cancelMethod != null && tryMethod == null) {
             return MethodContentState.CC;
+        }else if(confirmMethod != null && cancelMethod == null && tryMethod != null){
+            return MethodContentState.TC;
         }else if(confirmMethod != null && cancelMethod == null && tryMethod == null){
             return MethodContentState.C_ONLY;
         }else if(confirmMethod != null && cancelMethod != null && tryMethod != null){
@@ -64,6 +66,6 @@ public class MethodContent {
 
 
     public enum MethodContentState{
-        CC,C_ONLY,TCC;
+        CC,TC,C_ONLY,TCC;
     }
 }

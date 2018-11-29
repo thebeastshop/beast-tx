@@ -1,13 +1,11 @@
 /**
  * <p>Title: beast-tx</p>
- * <p>Description: 分布式事务框架，基于本地事务表模型，支持最终一致事务，TCC事务的事务框架平台</p>
+ * <p>Description: 分布式事务框架，基于TCC事务的事务框架监控跟踪平台</p>
  * @author Bryan.Zhang
  * @email weenyc31@163.com
  * @Date 2018/10/10
  */
 package com.thebeastshop.tx.annotation;
-
-import com.thebeastshop.tx.enums.TxTypeEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -20,5 +18,4 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BeastTx {
-    TxTypeEnum value() default TxTypeEnum.TCC;
 }

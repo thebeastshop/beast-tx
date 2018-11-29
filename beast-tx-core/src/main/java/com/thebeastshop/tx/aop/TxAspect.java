@@ -1,6 +1,6 @@
 /**
  * <p>Title: beast-tx</p>
- * <p>Description: 分布式事务框架，基于本地事务表模型，支持最终一致事务，TCC事务的事务框架平台</p>
+ * <p>Description: 分布式事务框架，基于TCC事务的事务框架监控跟踪平台</p>
  * @author Bryan.Zhang
  * @email weenyc31@163.com
  * @Date 2018/10/24
@@ -11,7 +11,6 @@ import com.thebeastshop.tx.annotation.BeastTx;
 import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.context.TxContext;
 import com.thebeastshop.tx.enums.TxContextStateEnum;
-import com.thebeastshop.tx.enums.TxTypeEnum;
 import com.thebeastshop.tx.exceptions.RollbackException;
 import com.thebeastshop.tx.exceptions.TransactionException;
 import com.thebeastshop.tx.utils.InetUtils;
@@ -50,10 +49,9 @@ public class TxAspect implements ApplicationContextAware {
             BeastTx annotation = method.getAnnotation(BeastTx.class);
 
             TxContext txContext = new TxContext(InetUtils.getEncodeAddress(), UniqueIdGenerator.generateId(),
-                    annotation.value(),
                     TxContextStateEnum.INIT);
             TransactionSynchronizationManager.bindResource(TxConstant.TRANSACTION_CONTEXT_KEY, txContext);
-            log.info("[BEAST-TX]开启事务，事务ID[{}],事务策略类型[{}]",txContext.getTxId(),txContext.getTxType().getValue());
+            log.info("[BEAST-TX]开启事务，事务ID[{}]",txContext.getTxId());
 
             Object result = jp.proceed();
             txContext.setTxContextState(TxContextStateEnum.SUCCESS);
@@ -61,22 +59,19 @@ public class TxAspect implements ApplicationContextAware {
         } catch (Throwable t) {
             log.error("[BEAST-TX]事务调用发生错误",t);
             TxContext txContext = (TxContext) TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_CONTEXT_KEY);
-            //如果为最终一致策略的时候。不进行回滚
-            if(txContext.getTxType().equals(TxTypeEnum.TCC)){
-                txContext.setTxContextState(TxContextStateEnum.ROLLBACKING);
-                try{
-                    if(txContext.needRollback()){
-                        log.info("[BEAST-TX]开始回滚事务，事务ID[{}]，事务策略类型[{}]",txContext.getTxId(),txContext.getTxType());
-                        txContext.rollback();
-                        log.info("[BEAST-TX]回滚事务[{}]成功",txContext.getTxId());
-                    }
-                }catch(RollbackException e){
-                    log.info("[BEAST-TX]回滚事务[{}]失败",txContext.getTxId());
-                    log.error(e.getMessage());
-                    txContext.setTxContextState(TxContextStateEnum.ROLLBACK_FAILED);
+            txContext.setTxContextState(TxContextStateEnum.ROLLBACKING);
+            try{
+                if(txContext.needRollback()){
+                    log.info("[BEAST-TX]开始回滚事务，事务ID[{}]",txContext.getTxId());
+                    txContext.rollback();
+                    log.info("[BEAST-TX]回滚事务[{}]成功",txContext.getTxId());
                 }
-                txContext.setTxContextState(TxContextStateEnum.ROLLBACK_SUCCESS);
+            }catch(RollbackException e){
+                log.info("[BEAST-TX]回滚事务[{}]失败",txContext.getTxId());
+                log.error(e.getMessage());
+                txContext.setTxContextState(TxContextStateEnum.ROLLBACK_FAILED);
             }
+            txContext.setTxContextState(TxContextStateEnum.ROLLBACK_SUCCESS);
             throw new TransactionException(t.getMessage());
         }finally {
             TransactionSynchronizationManager.unbindResource(TxConstant.TRANSACTION_CONTEXT_KEY);

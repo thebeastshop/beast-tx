@@ -1,6 +1,6 @@
 /**
  * <p>Title: beast-tx</p>
- * <p>Description: 分布式事务框架，基于本地事务表模型，支持最终一致事务，TCC事务的事务框架平台</p>
+ * <p>Description: 分布式事务框架，基于TCC事务的事务框架监控跟踪平台</p>
  * @author Bryan.Zhang
  * @email weenyc31@163.com
  * @Date 2018/10/9
@@ -14,7 +14,6 @@ import com.thebeastshop.tx.context.TxContext;
 import com.thebeastshop.tx.context.content.InvokeContent;
 import com.thebeastshop.tx.context.content.MethodContent;
 import com.thebeastshop.tx.dubbo.spring.DubboMethodScanner;
-import com.thebeastshop.tx.enums.TxTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -81,19 +80,12 @@ public class DubboTxFilter implements Filter {
             return result;
         }
 
-        TxTypeEnum txType = txContext.getTxType();
-        if(txType.equals(TxTypeEnum.TCC)){
-            if(result == null || result.hasException()){
-                return result;
-            }
-            InvokeContent invokeContent = getInvokeContent(invoker,invocation,methodContent,txContext,result);
-            txContext.logInvokeContent(invokeContent);
-        }else if(txType.equals(TxTypeEnum.FINAL_CONSISTENCY)){
-            if(result == null || result.hasException()){
-                InvokeContent invokeContent = getInvokeContent(invoker,invocation,methodContent,txContext,result);
-                txContext.logInvokeContent(invokeContent);
-            }
+        if(result == null || result.hasException()){
+            return result;
         }
+        InvokeContent invokeContent = getInvokeContent(invoker,invocation,methodContent,txContext,result);
+        txContext.logInvokeContent(invokeContent);
+
         return result;
     }
 
@@ -111,7 +103,6 @@ public class DubboTxFilter implements Filter {
         InvokeContent invokeContent = new InvokeContent();
         invokeContent.setInterfaceClass(interfaceClass);
         invokeContent.setTxId(txContext.getTxId());
-        invokeContent.setTxType(txContext.getTxType());
         invokeContent.setArgs(invocation.getArguments());
         invokeContent.setResult(result.getValue());
         invokeContent.setMethodContent(methodContent);

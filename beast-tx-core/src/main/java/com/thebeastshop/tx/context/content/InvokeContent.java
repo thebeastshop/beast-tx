@@ -1,6 +1,6 @@
 /**
  * <p>Title: beast-tx</p>
- * <p>Description: 分布式事务框架，基于本地事务表模型，支持最终一致事务，TCC事务的事务框架平台</p>
+ * <p>Description: 分布式事务框架，基于TCC事务的事务框架监控跟踪平台</p>
  * @author Bryan.Zhang
  * @email weenyc31@163.com
  * @Date 2018/9/30
@@ -8,13 +8,11 @@
 package com.thebeastshop.tx.context.content;
 
 import com.thebeastshop.tx.aop.TxAspect;
-import com.thebeastshop.tx.enums.TxTypeEnum;
 import com.thebeastshop.tx.exceptions.RollbackException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
 /**
@@ -27,8 +25,6 @@ public class InvokeContent {
     private Class interfaceClass;
 
     private Long txId;
-
-    private TxTypeEnum txType;
 
     private MethodContent methodContent;
 
@@ -112,13 +108,5 @@ public class InvokeContent {
 
     public void setResult(Object result) {
         this.result = result;
-    }
-
-    public TxTypeEnum getTxType() {
-        return txType;
-    }
-
-    public void setTxType(TxTypeEnum txType) {
-        this.txType = txType;
     }
 }
