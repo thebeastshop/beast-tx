@@ -75,35 +75,28 @@ public class FeignTxAspect {
             }
         }
 
-        boolean hasException = false;
         Object result = null;
         try{
             result = jp.proceed();
         }catch (Throwable t){
-            log.error(t.getMessage(),t);
-            hasException = true;
-        }
-
-        if(!hasException){
-            if(txContext == null){
-                return result;
-            }
-
-            if(methodContent == null){
-                return result;
-            }
-        }
-
-        InvokeContent invokeContent = getInvokeContent(interfaceClass,jp.getArgs(),methodContent,txContext,result);
-        txContext.logInvokeContent(invokeContent);
-
-        if (hasException){
             String errorMsg = MessageFormat.format("[BEAST-TX]事务ID[{0}],执行接口[{1}]方法[{2}]出现异常",
                     txContext.getTxId().toString(),
                     interfaceClass.getName(),
                     methodContent.getTryMethod().getName());
             throw new FeignException(errorMsg);
         }
+
+        if(txContext == null){
+            return result;
+        }
+
+        if(methodContent == null){
+            return result;
+        }
+
+        InvokeContent invokeContent = getInvokeContent(interfaceClass,jp.getArgs(),methodContent,txContext,result);
+        txContext.logInvokeContent(invokeContent);
+
         return result;
     }
 

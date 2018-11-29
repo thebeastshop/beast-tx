@@ -8,6 +8,7 @@
 package com.thebeastshop.tx.dubbo.filter;
 
 import com.alibaba.dubbo.rpc.*;
+import com.google.common.collect.Lists;
 import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.context.TxContext;
@@ -46,7 +47,7 @@ public class DubboTxFilter implements Filter {
         MethodContent methodContent = MethodDefinationManager.getMethodCentent(method);
 
         if(txContext != null && methodContent != null &&
-                methodContent.getMethodContentState().equals(MethodContent.MethodContentState.TCC)){
+                Lists.newArrayList(MethodContent.MethodContentState.TCC,MethodContent.MethodContentState.TC).contains(methodContent.getMethodContentState())){
             log.info("[BEAST-TX]事务ID[{}],开始执行接口[{}]的TRY方法[{}]",
                     txContext.getTxId(),
                     invoker.getInterface().getName(),

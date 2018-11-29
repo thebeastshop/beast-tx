@@ -29,7 +29,7 @@ public class TestServiceImpl implements TestService {
         jdbcTemplate.execute("insert into user (name, age) values ('beast-tx', '99131')");
 
         String result = demoService.test1("jack");
-        System.out.println("result:" + result);
+        log.info("result:" + result);
         demoService.test3(8L);
     }
 }

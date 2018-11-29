@@ -1,31 +1,36 @@
 package com.thebeastshop.tx.test.service.impl;
 
 import com.thebeastshop.tx.test.service.DemoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service("demoService")
 public class DemoServiceImpl implements DemoService {
+
+    private final static Logger log = LoggerFactory.getLogger(DemoServiceImpl.class);
+
     @Override
     public boolean tryTest1(String name) {
-        System.out.println("tryTest1");
+        log.info("tryTest1");
         return true;
     }
 
     @Override
     public String test1(String name) {
-        System.out.println("test1");
+        log.info("test1");
         return "hello," + name;
     }
 
     @Override
     public String test2(String name, Integer age) {
-        System.out.println("test2");
+        log.info("test2");
         return "hello," + name + ".age:" + age;
     }
 
     @Override
     public String test3(Long id) {
-        System.out.println("test3");
+        log.info("test3");
         if(1==1){
             throw new RuntimeException("test error");
         }
@@ -34,11 +39,11 @@ public class DemoServiceImpl implements DemoService {
 
     @Override
     public void cancelTest1(String str) {
-        System.out.println("cancel test1");
+        log.info("cancel test1");
     }
 
     @Override
     public void cancelTest2(String str) {
-        System.out.println("cancel test2");
+        log.info("cancel test2");
     }
 }

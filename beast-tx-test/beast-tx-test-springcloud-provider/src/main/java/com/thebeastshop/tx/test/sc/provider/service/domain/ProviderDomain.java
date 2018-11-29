@@ -12,6 +12,10 @@ public class ProviderDomain {
         return "hi," + name;
     }
 
+    public void cancelTest1(String name){
+        return;
+    }
+
     public String test2(String name) {
         if(1==1){
             throw new RuntimeException("test error");

@@ -16,6 +16,9 @@ public interface TxTestSayhiFeignClient {
     @RequestMapping(value = "test1",method = RequestMethod.GET)
     public String test1(@RequestParam(value = "name") String name);
 
+    @RequestMapping(value = "cancelTest1",method = RequestMethod.GET)
+    public void cancelTest1(@RequestParam(value ="name") String name);
+
     @RequestMapping(value = "test2",method = RequestMethod.GET)
     public String test2(@RequestParam(value = "name") String name);
 }
