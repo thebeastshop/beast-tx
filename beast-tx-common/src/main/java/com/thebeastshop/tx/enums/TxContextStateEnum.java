@@ -13,9 +13,6 @@ package com.thebeastshop.tx.enums;
 public enum TxContextStateEnum {
     INIT,
     SUCCESS,
-    RETRYING,
-    RETRY_SUCCESS,
-    RETRY_FAILED,
     ROLLBACKING,
     ROLLBACK_SUCCESS,
     ROLLBACK_FAILED

@@ -11,6 +11,7 @@ import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.thebeastshop.tx.aop.TxAspect;
 import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.dubbo.exceptions.DubboMethodScanException;
+import com.thebeastshop.tx.utils.LOGOPrint;
 import com.thebeastshop.tx.utils.MethodUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

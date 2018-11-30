@@ -14,6 +14,7 @@ import com.thebeastshop.tx.enums.TxContextStateEnum;
 import com.thebeastshop.tx.exceptions.RollbackException;
 import com.thebeastshop.tx.exceptions.TransactionException;
 import com.thebeastshop.tx.utils.InetUtils;
+import com.thebeastshop.tx.utils.LOGOPrint;
 import com.thebeastshop.tx.utils.UniqueIdGenerator;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
