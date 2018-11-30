@@ -1,4 +1,0 @@
-# netty实现
-com.thebeastshop.tx.network.netty.client.NettyNetworkClient
-# t-io实现
-com.thebeastshop.tx.network.tio.client.TioNetworkClient

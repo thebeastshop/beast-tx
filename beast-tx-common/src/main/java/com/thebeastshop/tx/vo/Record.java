@@ -8,7 +8,7 @@
 package com.thebeastshop.tx.vo;
 
 import com.alibaba.fastjson.JSON;
-import com.thebeastshop.tx.network.HasBytes;
+import com.thebeastshop.tx.socket.HasBytes;
 
 /**
  * 
