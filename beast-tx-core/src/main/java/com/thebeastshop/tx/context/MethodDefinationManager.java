@@ -11,6 +11,7 @@ import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.context.content.MethodContent;
 import com.thebeastshop.tx.enums.TccMethodTypeEnum;
 import com.thebeastshop.tx.hook.CancelInvokeHook;
+import com.thebeastshop.tx.utils.LOGOPrint;
 import com.thebeastshop.tx.utils.MethodUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,10 @@ public class MethodDefinationManager {
     private static Map<String, MethodContent> methodContentMap = new HashMap<>();
 
     private static CancelInvokeHook cancelInvokeHook;
+
+    static {
+        LOGOPrint.print();
+    }
 
     public static void registerMethod(Class clazz){
         registerClassList.add(clazz);

@@ -8,6 +8,7 @@
 package com.thebeastshop.tx.feign.spring;
 
 import com.thebeastshop.tx.context.MethodDefinationManager;
+import com.thebeastshop.tx.utils.LOGOPrint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
