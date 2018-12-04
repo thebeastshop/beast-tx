@@ -67,7 +67,8 @@ public class FeignMethodScanner implements BeanPostProcessor, ApplicationContext
         String searchPath = classpath + feignPackage;
         List<String> classPaths = doPath(new File(searchPath));
         for (String s : classPaths) {
-            s = s.replace(classpath.replace("/","\\").replaceFirst("\\\\",""),"").replace("\\",".").replace(".class","");
+            s = s.replace("\\","/");
+            s = s.substring(s.lastIndexOf("classes/")).replace("classes/","").replace("/",".").replace(".class","");
             Class cls = Class.forName(s);
             if(cls.getAnnotation(FeignClient.class) != null){
                 MethodDefinationManager.registerMethod(cls);
