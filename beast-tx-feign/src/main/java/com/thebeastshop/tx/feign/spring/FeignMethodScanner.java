@@ -53,7 +53,7 @@ public class FeignMethodScanner implements BeanPostProcessor, ApplicationContext
         } catch (Exception e) {
             throw new BeanCreationException("[BEAST-TX]扫描Feign package包出现异常");
         }
-        return null;
+        return bean;
     }
 
     @Override
