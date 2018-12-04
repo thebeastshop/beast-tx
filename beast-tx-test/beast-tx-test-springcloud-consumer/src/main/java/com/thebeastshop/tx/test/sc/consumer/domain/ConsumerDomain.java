@@ -5,8 +5,10 @@ import com.thebeastshop.tx.test.sc.consumer.feign.TxTestSayhiFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@Transactional
 public class ConsumerDomain {
 
     @Autowired

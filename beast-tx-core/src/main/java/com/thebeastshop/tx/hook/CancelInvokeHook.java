@@ -11,5 +11,5 @@ package com.thebeastshop.tx.hook;
  * 取消Hook接口
  */
 public interface CancelInvokeHook {
-	public void hookProcess(Class clazz, String method, Object[] args, Exception cancelException);
+	public void hookProcess(Class clazz, String method, Object[] args, Throwable cancelException);
 }

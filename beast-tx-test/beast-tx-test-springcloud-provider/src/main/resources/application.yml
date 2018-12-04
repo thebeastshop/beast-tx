@@ -1,12 +1,16 @@
 spring:
   application:
-    name: provider
+    name: test-provider
 server:
-  port: 2001
+  port: 2111
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:1001/eureka/
+      defaultZone: http://127.0.0.1:1111/eureka/
   instance:
     lease-renewal-interval-in-seconds: 1
     lease-expiration-duration-in-seconds: 2
+logging:
+  level:
+    root: info
+    org.springframework.web: info

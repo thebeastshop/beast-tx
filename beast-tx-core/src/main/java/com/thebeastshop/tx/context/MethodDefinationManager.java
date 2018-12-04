@@ -68,8 +68,14 @@ public class MethodDefinationManager {
     }
 
     public static void registerCancelInvokeHook(CancelInvokeHook cancelInvokeHook){
+        log.info("[BEAST-TX]开始注册Hook接口[{}]",cancelInvokeHook.getClass().getName());
         MethodDefinationManager.cancelInvokeHook = cancelInvokeHook;
     }
+
+    public static CancelInvokeHook getCancelInvokeHook(){
+        return MethodDefinationManager.cancelInvokeHook;
+    }
+
 
     private static TccMethodTypeEnum getMethodType(Method m){
         if(m.getName().startsWith(TxConstant.TRY_PREFIX)){

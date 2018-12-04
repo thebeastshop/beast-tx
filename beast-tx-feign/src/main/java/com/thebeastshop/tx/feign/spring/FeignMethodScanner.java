@@ -8,22 +8,29 @@
 package com.thebeastshop.tx.feign.spring;
 
 import com.thebeastshop.tx.context.MethodDefinationManager;
+import com.thebeastshop.tx.hook.CancelInvokeHook;
 import com.thebeastshop.tx.utils.LOGOPrint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.Ordered;
+import org.springframework.core.PriorityOrdered;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * spring cloud Feign的方法扫描器
  */
-public class FeignMethodScanner implements InitializingBean, ApplicationContextAware {
+public class FeignMethodScanner implements BeanPostProcessor, ApplicationContextAware {
 
     private final Logger log = LoggerFactory.getLogger(FeignMethodScanner.class);
 
@@ -31,8 +38,30 @@ public class FeignMethodScanner implements InitializingBean, ApplicationContextA
 
     private String feignPackage;
 
+    private AtomicBoolean hasScaned = new AtomicBoolean(false);
+
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        try {
+            if(!hasScaned.getAndSet(true)){
+                scanFeignClient();
+            }
+
+            if(CancelInvokeHook.class.isAssignableFrom(bean.getClass())){
+                MethodDefinationManager.registerCancelInvokeHook((CancelInvokeHook)bean);
+            }
+        } catch (Exception e) {
+            throw new BeanCreationException("[BEAST-TX]扫描Feign package包出现异常");
+        }
+        return null;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+    public void scanFeignClient() throws Exception {
         String classpath = FeignMethodScanner.class.getResource("/").getPath();
         feignPackage = feignPackage.replace(".", File.separator);
         String searchPath = classpath + feignPackage;
@@ -71,10 +100,6 @@ public class FeignMethodScanner implements InitializingBean, ApplicationContextA
 
     public static ApplicationContext getApplicationContext(){
         return FeignMethodScanner.applicationContext;
-    }
-
-    public String getFeignPackage() {
-        return feignPackage;
     }
 
     public void setFeignPackage(String feignPackage) {

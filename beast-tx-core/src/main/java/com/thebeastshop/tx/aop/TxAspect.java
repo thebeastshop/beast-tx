@@ -9,10 +9,12 @@ package com.thebeastshop.tx.aop;
 
 import com.thebeastshop.tx.annotation.BeastTx;
 import com.thebeastshop.tx.constant.TxConstant;
+import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.context.TxContext;
 import com.thebeastshop.tx.enums.TxContextStateEnum;
 import com.thebeastshop.tx.exceptions.RollbackException;
 import com.thebeastshop.tx.exceptions.TransactionException;
+import com.thebeastshop.tx.hook.CancelInvokeHook;
 import com.thebeastshop.tx.utils.InetUtils;
 import com.thebeastshop.tx.utils.LOGOPrint;
 import com.thebeastshop.tx.utils.UniqueIdGenerator;
@@ -44,11 +46,9 @@ public class TxAspect implements ApplicationContextAware {
 
     @Around("cut()")
     public Object around(ProceedingJoinPoint jp) {
+        MethodSignature signature = (MethodSignature)jp.getSignature();
+        Method method = signature.getMethod();
         try {
-            MethodSignature signature = (MethodSignature)jp.getSignature();
-            Method method = signature.getMethod();
-            BeastTx annotation = method.getAnnotation(BeastTx.class);
-
             TxContext txContext = new TxContext(InetUtils.getEncodeAddress(), UniqueIdGenerator.generateId(),
                     TxContextStateEnum.INIT);
             TransactionSynchronizationManager.bindResource(TxConstant.TRANSACTION_CONTEXT_KEY, txContext);
@@ -73,6 +73,12 @@ public class TxAspect implements ApplicationContextAware {
                 txContext.setTxContextState(TxContextStateEnum.ROLLBACK_FAILED);
             }
             txContext.setTxContextState(TxContextStateEnum.ROLLBACK_SUCCESS);
+
+            CancelInvokeHook cancelInvokeHook = MethodDefinationManager.getCancelInvokeHook();
+            if(cancelInvokeHook != null){
+                cancelInvokeHook.hookProcess(jp.getTarget().getClass(),method.getName(),jp.getArgs(),t);
+            }
+
             throw new TransactionException(t.getMessage());
         }finally {
             TransactionSynchronizationManager.unbindResource(TxConstant.TRANSACTION_CONTEXT_KEY);

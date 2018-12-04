@@ -2,10 +2,10 @@ spring:
   application:
     name: eureka-server
 server:
-  port: 1001
+  port: 1111
 eureka:
   instance:
-    hostname: localhost
+    hostname: 127.0.0.1
   client:
     register-with-eureka: false
     fetch-registry: false
@@ -13,3 +13,7 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
   server:
     enable-self-preservation: false
+logging:
+  level:
+    root: info
+    org.springframework.web: info
