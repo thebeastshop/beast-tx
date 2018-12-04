@@ -7,10 +7,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.alibaba.fastjson.JSON;
-import com.thebeastshop.tx.network.HasBytes;
-import com.thebeastshop.tx.network.config.ServerConfig;
-import com.thebeastshop.tx.network.server.NetworkServer;
-import com.thebeastshop.tx.network.server.NetworkServerHandler;
+import com.thebeastshop.tx.socket.HasBytes;
+import com.thebeastshop.tx.socket.config.ServerConfig;
+import com.thebeastshop.tx.socket.server.SocketServer;
+import com.thebeastshop.tx.socket.server.SocketServerHandler;
 import com.thebeastshop.tx.vo.Record;
 
 @SpringBootApplication
@@ -19,10 +19,10 @@ public class Application {
 
 	public static void main(String[] args) {
 		// -------启动网络服务端-------
-		ServiceLoader<NetworkServer> loader = ServiceLoader.load(NetworkServer.class);
+		ServiceLoader<SocketServer> loader = ServiceLoader.load(SocketServer.class);
 		if (loader != null && loader.iterator().hasNext()) {
 			ServerConfig config = new ServerConfig();
-			config.setHandler(new NetworkServerHandler() {
+			config.setHandler(new SocketServerHandler() {
 				@Override
 				public HasBytes receive(byte[] dataBytes) {
 					Record record = JSON.parseObject(dataBytes, Record.class);

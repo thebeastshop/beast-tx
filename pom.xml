@@ -164,5 +164,8 @@
 		<module>beast-tx-dubbo</module>
         <module>beast-tx-common</module>
 		<module>beast-tx-feign</module>
+		<module>beast-tx-socket-common</module>
+		<module>beast-tx-socket-tio</module>
+		<module>beast-tx-socket-netty</module>
 	</modules>
 </project>
