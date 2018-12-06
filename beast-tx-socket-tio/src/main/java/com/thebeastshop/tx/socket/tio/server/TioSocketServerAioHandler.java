@@ -9,6 +9,7 @@ package com.thebeastshop.tx.socket.tio.server;
 
 import java.nio.ByteBuffer;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.ArrayUtils;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
@@ -17,7 +18,6 @@ import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.server.intf.ServerAioHandler;
 
-import com.thebeastshop.tx.socket.HasBytes;
 import com.thebeastshop.tx.socket.server.SocketServerHandler;
 import com.thebeastshop.tx.socket.tio.SocketPacket;
 import com.thebeastshop.tx.socket.tio.TioCoder;
@@ -44,10 +44,10 @@ public class TioSocketServerAioHandler implements ServerAioHandler {
 		SocketPacket storagePacket = (SocketPacket) packet;
 		byte[] body = storagePacket.getBody();
 		if (ArrayUtils.isNotEmpty(body) && handler != null) {
-			HasBytes reply = handler.receive(body);
+			Object reply = handler.receive(body);
 			if (reply != null) {
 				SocketPacket replyPacket = new SocketPacket();
-				replyPacket.setBody(reply.toBytes());
+				replyPacket.setBody(JSON.toJSONString(reply).getBytes());
 				Tio.send(channelContext, replyPacket);
 			}
 		}

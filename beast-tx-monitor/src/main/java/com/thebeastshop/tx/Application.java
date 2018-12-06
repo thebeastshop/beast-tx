@@ -7,7 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.alibaba.fastjson.JSON;
-import com.thebeastshop.tx.socket.HasBytes;
 import com.thebeastshop.tx.socket.config.ServerConfig;
 import com.thebeastshop.tx.socket.server.SocketServer;
 import com.thebeastshop.tx.socket.server.SocketServerHandler;
@@ -22,9 +21,9 @@ public class Application {
 		ServiceLoader<SocketServer> loader = ServiceLoader.load(SocketServer.class);
 		if (loader != null && loader.iterator().hasNext()) {
 			ServerConfig config = new ServerConfig();
-			config.setHandler(new SocketServerHandler() {
+			config.setHandler(new SocketServerHandler<Record>() {
 				@Override
-				public HasBytes receive(byte[] dataBytes) {
+				public Record receive(byte[] dataBytes) {
 					Record record = JSON.parseObject(dataBytes, Record.class);
 					System.out.println("存储数据：" + JSON.toJSONString(record));
 					Record reply = new Record();

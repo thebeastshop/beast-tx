@@ -7,7 +7,7 @@
  */
 package com.thebeastshop.tx.socket.netty.client;
 
-import com.thebeastshop.tx.socket.HasBytes;
+import com.alibaba.fastjson.JSON;
 import com.thebeastshop.tx.socket.client.SocketClient;
 import com.thebeastshop.tx.socket.config.ClientConfig;
 
@@ -55,8 +55,7 @@ public class NettySocketClient implements SocketClient {
 	}
 
 	@Override
-	public void send(HasBytes t) {
-		ch.writeAndFlush(t.toBytes());
+	public <T> void send(T t) {
+		ch.writeAndFlush(JSON.toJSONString(t).getBytes());
 	}
-
 }

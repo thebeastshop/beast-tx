@@ -7,6 +7,7 @@
  */
 package com.thebeastshop.tx.socket.tio.client;
 
+import com.alibaba.fastjson.JSON;
 import org.tio.client.ClientChannelContext;
 import org.tio.client.ClientGroupContext;
 import org.tio.client.ReconnConf;
@@ -15,7 +16,6 @@ import org.tio.client.intf.ClientAioListener;
 import org.tio.core.Node;
 import org.tio.core.Tio;
 
-import com.thebeastshop.tx.socket.HasBytes;
 import com.thebeastshop.tx.socket.client.SocketClient;
 import com.thebeastshop.tx.socket.config.ClientConfig;
 import com.thebeastshop.tx.socket.tio.SocketPacket;
@@ -47,10 +47,9 @@ public class TioSocketClient implements SocketClient {
 	}
 
 	@Override
-	public void send(HasBytes t) {
+	public <T> void send(T t) {
 		SocketPacket packet = new SocketPacket();
-		packet.setBody(t.toBytes());
+		packet.setBody(JSON.toJSONString(t).getBytes());
 		Tio.send(clientChannelContext, packet);
 	}
-
 }

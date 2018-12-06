@@ -28,22 +28,14 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.t-io</groupId>
-            <artifactId>tio-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-        <dependency>
-		    <groupId>io.netty</groupId>
-		    <artifactId>netty-all</artifactId>
-		</dependency>
-		<dependency>
+		<!--<dependency>
             <groupId>com.thebeastshop</groupId>
             <artifactId>beast-tx-socket-common</artifactId>
             <version>${project.version}</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 </project>

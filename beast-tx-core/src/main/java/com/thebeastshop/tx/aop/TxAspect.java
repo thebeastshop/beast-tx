@@ -7,7 +7,6 @@
  */
 package com.thebeastshop.tx.aop;
 
-import com.thebeastshop.tx.annotation.BeastTx;
 import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.context.TxContext;
@@ -15,8 +14,8 @@ import com.thebeastshop.tx.enums.TxContextStateEnum;
 import com.thebeastshop.tx.exceptions.RollbackException;
 import com.thebeastshop.tx.exceptions.TransactionException;
 import com.thebeastshop.tx.hook.CancelInvokeHook;
+import com.thebeastshop.tx.socket.client.SocketClient;
 import com.thebeastshop.tx.utils.InetUtils;
-import com.thebeastshop.tx.utils.LOGOPrint;
 import com.thebeastshop.tx.utils.UniqueIdGenerator;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -29,6 +28,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
 /**
@@ -41,6 +42,9 @@ public class TxAspect implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext = null;
 
+    @Resource
+    private SocketClient socketClient;
+
     @Pointcut("@annotation(com.thebeastshop.tx.annotation.BeastTx)")
     public void cut(){}
 
@@ -48,8 +52,9 @@ public class TxAspect implements ApplicationContextAware {
     public Object around(ProceedingJoinPoint jp) {
         MethodSignature signature = (MethodSignature)jp.getSignature();
         Method method = signature.getMethod();
+        TxContext txContext = null;
         try {
-            TxContext txContext = new TxContext(InetUtils.getEncodeAddress(), UniqueIdGenerator.generateId(),
+            txContext = new TxContext(InetUtils.getEncodeAddress(), UniqueIdGenerator.generateId(),
                     TxContextStateEnum.INIT);
             TransactionSynchronizationManager.bindResource(TxConstant.TRANSACTION_CONTEXT_KEY, txContext);
             log.info("[BEAST-TX]开启事务，事务ID[{}]",txContext.getTxId());
@@ -59,7 +64,6 @@ public class TxAspect implements ApplicationContextAware {
             return result;
         } catch (Throwable t) {
             log.error("[BEAST-TX]事务调用发生错误",t);
-            TxContext txContext = (TxContext) TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_CONTEXT_KEY);
             txContext.setTxContextState(TxContextStateEnum.ROLLBACKING);
             try{
                 if(txContext.needRollback()){
@@ -81,6 +85,13 @@ public class TxAspect implements ApplicationContextAware {
 
             throw new TransactionException(t.getMessage());
         }finally {
+            try{
+                if(socketClient!=null){
+                    socketClient.send(txContext);
+                }
+            }catch(Exception e){
+                log.error("[BEAST-TX]发送监控数据异常",e);
+            }
             TransactionSynchronizationManager.unbindResource(TxConstant.TRANSACTION_CONTEXT_KEY);
         }
     }

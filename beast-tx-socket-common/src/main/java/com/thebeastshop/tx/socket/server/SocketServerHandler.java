@@ -7,13 +7,11 @@
  */
 package com.thebeastshop.tx.socket.server;
 
-import com.thebeastshop.tx.socket.HasBytes;
-
 /**
  * 
  */
-public interface SocketServerHandler {
+public interface SocketServerHandler<T> {
 
-	HasBytes receive(byte[] dataBytes);
+	T receive(byte[] dataBytes);
 
 }

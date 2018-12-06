@@ -82,7 +82,7 @@ public class FeignTxAspect {
             String errorMsg = MessageFormat.format("[BEAST-TX]事务ID[{0}],执行接口[{1}]方法[{2}]出现异常",
                     txContext.getTxId().toString(),
                     interfaceClass.getName(),
-                    methodContent.getTryMethod().getName());
+                    methodContent.getConfirmMethod().getName());
             throw new FeignException(errorMsg);
         }
 

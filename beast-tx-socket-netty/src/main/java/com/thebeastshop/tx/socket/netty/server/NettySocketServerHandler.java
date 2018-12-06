@@ -7,9 +7,9 @@
  */
 package com.thebeastshop.tx.socket.netty.server;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.thebeastshop.tx.socket.HasBytes;
 import com.thebeastshop.tx.socket.server.SocketServerHandler;
 
 import io.netty.channel.ChannelHandler.Sharable;
@@ -27,9 +27,9 @@ public class NettySocketServerHandler extends SimpleChannelInboundHandler<byte[]
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, byte[] msg) throws Exception {
 		if (ArrayUtils.isNotEmpty(msg) && handler != null) {
-			HasBytes reply = handler.receive(msg);
+			Object reply = handler.receive(msg);
 			if (reply != null) {
-				ctx.writeAndFlush(reply.toBytes());
+				ctx.writeAndFlush(JSON.toJSONString(reply).getBytes());
 			}
 		}
 	}
@@ -39,5 +39,4 @@ public class NettySocketServerHandler extends SimpleChannelInboundHandler<byte[]
 		cause.printStackTrace();
 		ctx.close();
 	}
-
 }

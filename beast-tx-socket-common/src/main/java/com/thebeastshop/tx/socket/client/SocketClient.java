@@ -7,7 +7,6 @@
  */
 package com.thebeastshop.tx.socket.client;
 
-import com.thebeastshop.tx.socket.HasBytes;
 import com.thebeastshop.tx.socket.config.ClientConfig;
 
 /**
@@ -17,6 +16,6 @@ public interface SocketClient {
 
 	SocketClient initClient(ClientConfig config);
 
-	void send(HasBytes t);
+	<T> void send(T t);
 
 }

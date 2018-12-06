@@ -27,7 +27,7 @@ public class SocketClientTest {
 		});
 		SocketClient client = SocketClientProvider.create(config);
 		Record record = new Record();
-		record.setTxId(1L);
+		record.setTxId(133L);
 		client.send(record);
 		
 		System.in.read();
