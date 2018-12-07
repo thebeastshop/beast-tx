@@ -22,7 +22,8 @@ public class SocketClientTest {
 			@Override
 			public void handle(byte[] dataBytes) {
 				MonitorVo record = JSON.parseObject(dataBytes, MonitorVo.class);
-				System.out.println("收到消息：" + JSON.toJSONString(record));			}
+				System.out.println("收到消息：" + JSON.toJSONString(record));
+			}
 		});
 		SocketClient client = SocketClientProvider.create(config);
 		MonitorVo monitorVo = new MonitorVo();
@@ -32,8 +33,8 @@ public class SocketClientTest {
 		monitorVo.setTxMethodName("demoMethod");
 		monitorVo.setTxContextState(TxContextStateEnum.SUCCESS);
 		client.send(monitorVo);
-		}
-		
+
+		System.in.read();
 	}
 
 }
