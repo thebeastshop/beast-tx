@@ -10,8 +10,6 @@ package com.thebeastshop.tx.socket.netty.client;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.thebeastshop.tx.socket.client.SocketClientHandler;
 
@@ -25,8 +23,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 @Sharable
 public class NettySocketClientHandler extends SimpleChannelInboundHandler<byte[]> {
-
-	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private NettySocketClient client;
 
