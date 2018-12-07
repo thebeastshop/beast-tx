@@ -14,6 +14,7 @@ import com.thebeastshop.tx.socket.config.ClientConfig;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -26,31 +27,37 @@ import io.netty.handler.codec.bytes.ByteArrayEncoder;
  * 用netty通信框架实现客户端
  */
 public class NettySocketClient implements SocketClient {
-	
+
+	private ClientConfig config;
+
 	private Channel ch;
 
-	@Override
-	public SocketClient initClient(ClientConfig config) {
-		EventLoopGroup group = new NioEventLoopGroup();
+	public void init(EventLoopGroup eventLoopGroup) {
 		try {
-			final NettySocketClientHandler nettyClientHandler = new NettySocketClientHandler();
+			final NettySocketClientHandler nettyClientHandler = new NettySocketClientHandler(this);
 			nettyClientHandler.handler = config.getHandler();
 			Bootstrap b = new Bootstrap();
-			b.group(group).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
+			b.group(eventLoopGroup).channel(NioSocketChannel.class).option(ChannelOption.SO_KEEPALIVE, true).handler(new ChannelInitializer<SocketChannel>() {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
 					p.addLast(new ByteArrayDecoder());
-			        p.addLast(new ByteArrayEncoder());
+					p.addLast(new ByteArrayEncoder());
 					p.addLast(nettyClientHandler);
 				}
 			});
 
 			// Start the connection attempt.
-			ch = b.connect(config.getIp(), config.getPort()).sync().channel();
+			ch = b.connect(config.getIp(), config.getPort()).addListener(new ConnectionListener(this)).channel();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public SocketClient initClient(ClientConfig config) {
+		this.config = config;
+		init(new NioEventLoopGroup());
 		return this;
 	}
 
