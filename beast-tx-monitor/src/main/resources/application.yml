@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: tx-monitor
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/webapp
+
+server:
+  port: 4111
+logging:
+  level:
+    root: info

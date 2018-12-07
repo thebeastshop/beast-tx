@@ -3,7 +3,6 @@ package com.thebeastshop.tx;
 import java.util.ServiceLoader;
 
 import com.thebeastshop.tx.vo.MonitorVo;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -14,7 +13,6 @@ import com.thebeastshop.tx.socket.server.SocketServerHandler;
 import com.thebeastshop.tx.vo.Record;
 
 @SpringBootApplication
-@MapperScan("com.thebeastshop.tx.**.mapper")
 public class Application {
 
 	public static void main(String[] args) {
