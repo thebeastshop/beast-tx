@@ -2,6 +2,7 @@ package com.thebeastshop.tx;
 
 import java.util.ServiceLoader;
 
+import com.thebeastshop.tx.vo.MonitorVo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,14 +22,14 @@ public class Application {
 		ServiceLoader<SocketServer> loader = ServiceLoader.load(SocketServer.class);
 		if (loader != null && loader.iterator().hasNext()) {
 			ServerConfig config = new ServerConfig();
-			config.setHandler(new SocketServerHandler<Record>() {
+			config.setHandler(new SocketServerHandler<Void>() {
 				@Override
-				public Record receive(byte[] dataBytes) {
-					Record record = JSON.parseObject(dataBytes, Record.class);
-					System.out.println("存储数据：" + JSON.toJSONString(record));
+				public Void receive(byte[] dataBytes) {
+					MonitorVo monitorVo = JSON.parseObject(dataBytes, MonitorVo.class);
+					System.out.println("存储数据：" + JSON.toJSONString(monitorVo));
 					Record reply = new Record();
 					reply.setTxId(111);
-					return reply;
+					return null;
 				}
 			});
 			loader.iterator().next().initServer(config).start();

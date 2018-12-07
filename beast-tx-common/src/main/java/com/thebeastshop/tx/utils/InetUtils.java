@@ -40,17 +40,12 @@ public class InetUtils {
         return null;
     }
 
-    public static String getEncodeAddress(){
-        return Base64Utils.encode(getLocalAddress().getHostAddress());
-    }
-
-    public static String decodeAddress(String encodeAddress){
-        return Base64Utils.decode(encodeAddress);
+    public static String getAddress(){
+        return getLocalAddress().getHostAddress();
     }
 
     public static void main(String[] args) {
-        String encode = getEncodeAddress();
+        String encode = getAddress();
         System.out.println(encode);
-        System.out.println(decodeAddress(encode));
     }
 }

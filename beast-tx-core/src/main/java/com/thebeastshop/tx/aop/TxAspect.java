@@ -17,6 +17,7 @@ import com.thebeastshop.tx.hook.CancelInvokeHook;
 import com.thebeastshop.tx.socket.client.SocketClient;
 import com.thebeastshop.tx.utils.InetUtils;
 import com.thebeastshop.tx.utils.UniqueIdGenerator;
+import com.thebeastshop.tx.vo.MonitorVo;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -51,10 +52,15 @@ public class TxAspect implements ApplicationContextAware {
     @Around("cut()")
     public Object around(ProceedingJoinPoint jp) {
         MethodSignature signature = (MethodSignature)jp.getSignature();
-        Method method = signature.getMethod();
+        Class clazz = jp.getTarget().getClass();
+        Method txMethod = signature.getMethod();
+        Object[] txArgs = jp.getArgs();
         TxContext txContext = null;
         try {
-            txContext = new TxContext(InetUtils.getEncodeAddress(), UniqueIdGenerator.generateId(),
+            txContext = new TxContext(InetUtils.getAddress(),UniqueIdGenerator.generateId(),
+                    clazz.getName(),
+                    txMethod.getName(),
+                    txArgs,
                     TxContextStateEnum.INIT);
             TransactionSynchronizationManager.bindResource(TxConstant.TRANSACTION_CONTEXT_KEY, txContext);
             log.info("[BEAST-TX]开启事务，事务ID[{}]",txContext.getTxId());
@@ -64,6 +70,7 @@ public class TxAspect implements ApplicationContextAware {
             return result;
         } catch (Throwable t) {
             log.error("[BEAST-TX]事务调用发生错误",t);
+            txContext.setExceptionMessage(t.getMessage());
             txContext.setTxContextState(TxContextStateEnum.ROLLBACKING);
             try{
                 if(txContext.needRollback()){
@@ -71,23 +78,23 @@ public class TxAspect implements ApplicationContextAware {
                     txContext.rollback();
                     log.info("[BEAST-TX]回滚事务[{}]成功",txContext.getTxId());
                 }
+                txContext.setTxContextState(TxContextStateEnum.ROLLBACK_SUCCESS);
             }catch(RollbackException e){
                 log.info("[BEAST-TX]回滚事务[{}]失败",txContext.getTxId());
                 log.error(e.getMessage());
                 txContext.setTxContextState(TxContextStateEnum.ROLLBACK_FAILED);
             }
-            txContext.setTxContextState(TxContextStateEnum.ROLLBACK_SUCCESS);
-
             CancelInvokeHook cancelInvokeHook = MethodDefinationManager.getCancelInvokeHook();
             if(cancelInvokeHook != null){
-                cancelInvokeHook.hookProcess(jp.getTarget().getClass(),method.getName(),jp.getArgs(),t);
+                cancelInvokeHook.hookProcess(jp.getTarget().getClass(),txMethod.getName(),jp.getArgs(),t);
             }
 
             throw new TransactionException(t.getMessage());
         }finally {
             try{
                 if(socketClient!=null){
-                    socketClient.send(txContext);
+                    MonitorVo monitorVo = convertToMonitorVo(txContext);
+                    socketClient.send(monitorVo);
                 }
             }catch(Exception e){
                 log.error("[BEAST-TX]发送监控数据异常",e);
@@ -103,5 +110,16 @@ public class TxAspect implements ApplicationContextAware {
 
     public static ApplicationContext getApplicationContext(){
         return TxAspect.applicationContext;
+    }
+
+    private MonitorVo convertToMonitorVo(TxContext context){
+        MonitorVo monitorVo = new MonitorVo();
+        monitorVo.setNodeId(context.getNodeId());
+        monitorVo.setTxId(context.getTxId());
+        monitorVo.setTxClassName(context.getTxClassName());
+        monitorVo.setTxMethodName(context.getTxMethodName());
+        monitorVo.setTxArgs(context.getTxArgs());
+        monitorVo.setTxContextState(context.getTxContextState());
+        return monitorVo;
     }
 }

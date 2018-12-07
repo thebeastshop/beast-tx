@@ -25,13 +25,24 @@ public class TxContext {
 
     private Long txId;
 
+    private String txClassName;
+
+    private String txMethodName;
+
+    private Object[] txArgs;
+
     private TxContextStateEnum txContextState;
+
+    private String exceptionMessage;
 
     private final ConcurrentLinkedDeque<InvokeContent> invokeQueue = new ConcurrentLinkedDeque<>();
 
-    public TxContext(String nodeId, Long txId, TxContextStateEnum txContextState) {
+    public TxContext(String nodeId, Long txId,String txClassName,String txMethodName,Object[] txArgs,TxContextStateEnum txContextState) {
         this.nodeId = nodeId;
         this.txId = txId;
+        this.txClassName = txClassName;
+        this.txMethodName = txMethodName;
+        this.txArgs = txArgs;
         this.txContextState = txContextState;
     }
 
@@ -81,4 +92,35 @@ public class TxContext {
         return !invokeQueue.isEmpty();
     }
 
+    public String getTxClassName() {
+        return txClassName;
+    }
+
+    public void setTxClassName(String txClassName) {
+        this.txClassName = txClassName;
+    }
+
+    public String getTxMethodName() {
+        return txMethodName;
+    }
+
+    public void setTxMethodName(String txMethodName) {
+        this.txMethodName = txMethodName;
+    }
+
+    public Object[] getTxArgs() {
+        return txArgs;
+    }
+
+    public void setTxArgs(Object[] txArgs) {
+        this.txArgs = txArgs;
+    }
+
+    public String getExceptionMessage() {
+        return exceptionMessage;
+    }
+
+    public void setExceptionMessage(String exceptionMessage) {
+        this.exceptionMessage = exceptionMessage;
+    }
 }
