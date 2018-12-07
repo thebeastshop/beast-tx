@@ -12,7 +12,7 @@ import com.thebeastshop.tx.socket.client.SocketClient;
 import com.thebeastshop.tx.socket.client.SocketClientHandler;
 import com.thebeastshop.tx.socket.client.SocketClientProvider;
 import com.thebeastshop.tx.socket.config.ClientConfig;
-import com.thebeastshop.tx.vo.Record;
+import com.thebeastshop.tx.vo.MonitorVo;
 
 public class SocketClientTest {
 
@@ -21,16 +21,20 @@ public class SocketClientTest {
 		config.setHandler(new SocketClientHandler() {
 			@Override
 			public void handle(byte[] dataBytes) {
-				Record record = JSON.parseObject(dataBytes, Record.class);
+				MonitorVo record = JSON.parseObject(dataBytes, MonitorVo.class);
 				System.out.println("收到消息：" + JSON.toJSONString(record));
 			}
 		});
 		SocketClient client = SocketClientProvider.create(config);
-		Record record = new Record();
+		MonitorVo record = new MonitorVo();
 		record.setTxId(133L);
-		client.send(record);
-		
-		System.in.read();
+		int second = 100;
+		while (second-- > 0) {
+			System.out.println("second: " + second);
+			client.send(record);
+			Thread.sleep(1000);
+		}
+
 	}
 
 }

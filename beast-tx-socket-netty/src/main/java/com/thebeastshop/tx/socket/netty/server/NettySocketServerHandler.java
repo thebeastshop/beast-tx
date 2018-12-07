@@ -7,9 +7,9 @@
  */
 package com.thebeastshop.tx.socket.netty.server;
 
-import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.thebeastshop.tx.socket.server.SocketServerHandler;
 
 import io.netty.channel.ChannelHandler.Sharable;
