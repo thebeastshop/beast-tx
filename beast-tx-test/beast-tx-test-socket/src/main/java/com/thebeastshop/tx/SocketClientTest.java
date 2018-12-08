@@ -14,6 +14,7 @@ import com.thebeastshop.tx.socket.client.SocketClientHandler;
 import com.thebeastshop.tx.socket.client.SocketClientProvider;
 import com.thebeastshop.tx.socket.config.ClientConfig;
 import com.thebeastshop.tx.vo.MonitorVo;
+
 public class SocketClientTest {
 
 	public static void main(String[] args) throws Exception {
@@ -25,6 +26,7 @@ public class SocketClientTest {
 				System.out.println("收到消息：" + JSON.toJSONString(record));
 			}
 		});
+
 		SocketClient client = SocketClientProvider.create(config);
 		MonitorVo monitorVo = new MonitorVo();
 		monitorVo.setNodeId("127.0.0.1");
@@ -32,7 +34,12 @@ public class SocketClientTest {
 		monitorVo.setTxClassName("DemoClassName");
 		monitorVo.setTxMethodName("demoMethod");
 		monitorVo.setTxContextState(TxContextStateEnum.SUCCESS);
-		client.send(monitorVo);
+		int second = 100;
+		while (second-- > 0) {
+			System.out.println("Second: " + second);
+			client.send(monitorVo);
+			Thread.sleep(1000);
+		}
 
 		System.in.read();
 	}
