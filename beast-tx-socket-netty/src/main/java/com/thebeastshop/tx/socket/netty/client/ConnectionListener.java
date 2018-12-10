@@ -32,7 +32,7 @@ public class ConnectionListener implements ChannelFutureListener {
 	@Override
 	public void operationComplete(ChannelFuture channelFuture) throws Exception {
 		if (!channelFuture.isSuccess()) {
-			log.warn("Reconnect");
+			log.warn("Try Reconnect");
 			final EventLoop loop = channelFuture.channel().eventLoop();
 			loop.schedule(new Runnable() {
 				@Override
@@ -40,6 +40,8 @@ public class ConnectionListener implements ChannelFutureListener {
 					client.init(loop);
 				}
 			}, 1L, TimeUnit.SECONDS);
+		} else {
+			log.warn("Reconnect Success");
 		}
 	}
 

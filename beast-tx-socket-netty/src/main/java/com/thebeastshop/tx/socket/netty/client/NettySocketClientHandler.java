@@ -51,6 +51,7 @@ public class NettySocketClientHandler extends SimpleChannelInboundHandler<byte[]
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		log.error("Connect Refuse");
 		final EventLoop eventLoop = ctx.channel().eventLoop();
 		eventLoop.schedule(new Runnable() {
 			@Override
