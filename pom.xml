@@ -148,14 +148,35 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
+
+	<distributionManagement>
+		<repository>
+			<id>nexus-releases</id>
+			<name>nexus-releases</name>
+			<url>http://118.178.236.200:8087/nexus/content/repositories/thirdparty</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>nexus-snapshots</name>
+			<url>http://118.178.236.200:8087/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<modules>
 		<module>beast-tx-core</module>

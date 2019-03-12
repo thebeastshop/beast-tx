@@ -13,6 +13,7 @@
 		<mybatis.spring.boot.version>1.2.2</mybatis.spring.boot.version>
 		<spring-boot.version>1.5.17.RELEASE</spring-boot.version>
 		<beast-tx-common.version>1.0.0-SNAPSHOT</beast-tx-common.version>
+		<mysql.version>5.1.41</mysql.version>
 	</properties>
 
 	<dependencyManagement>
@@ -119,7 +120,12 @@
 					<overwrite>true</overwrite>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
