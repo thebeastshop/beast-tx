@@ -14,8 +14,6 @@
 		<java.version>1.8</java.version>
 		<junit.version>4.12</junit.version>
 		<org.slf4j.version>1.7.21</org.slf4j.version>
-		<log4j.version>1.2.17</log4j.version>
-		<log4j-slf4j.version>1.7.5</log4j-slf4j.version>
 		<fastjson.version>1.2.29</fastjson.version>
 		<common.lang.version>3.5</common.lang.version>
 		<common.codec.version>1.10</common.codec.version>
@@ -26,11 +24,11 @@
 		<mysql.version>5.1.41</mysql.version>
 		<druid.version>1.0.14</druid.version>
 		<javassist.version>3.22.0-GA</javassist.version>
-		<disruptor.version>3.4.1</disruptor.version>
 		<aspectj.version>1.8.13</aspectj.version>
 		<tio.version>3.2.0.v20180918-RELEASE</tio.version>
 		<guava.version>19.0</guava.version>
 		<netty.version>4.1.30.Final</netty.version>
+		<log4j-over-slf4j.version>1.7.25</log4j-over-slf4j.version>
 	</properties>
 
 	<dependencyManagement>
@@ -41,19 +39,14 @@
 				<version>${junit.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>${log4j.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>${org.slf4j.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>${log4j-slf4j.version}</version>
+				<artifactId>log4j-over-slf4j</artifactId>
+				<version>${log4j-over-slf4j.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.alibaba</groupId>
@@ -114,11 +107,6 @@
 				<groupId>org.javassist</groupId>
 				<artifactId>javassist</artifactId>
 				<version>${javassist.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.lmax</groupId>
-				<artifactId>disruptor</artifactId>
-				<version>${disruptor.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.aspectj</groupId>

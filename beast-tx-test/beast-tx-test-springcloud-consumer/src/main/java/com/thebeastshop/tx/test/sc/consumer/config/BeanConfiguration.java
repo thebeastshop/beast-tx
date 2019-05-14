@@ -49,12 +49,12 @@ public class BeanConfiguration {
         return new FeignTxAspect();
     }
 
-    @Bean
+    /*@Bean
     public SocketClientFactory socketClient() throws Exception {
         SocketClientFactory factory=  new SocketClientFactory();
         factory.setIp("127.0.0.1");
         factory.setPort(6789);
         return factory;
-    }
+    }*/
 
 }

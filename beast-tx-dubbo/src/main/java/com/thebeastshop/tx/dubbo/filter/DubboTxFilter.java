@@ -7,6 +7,8 @@
  */
 package com.thebeastshop.tx.dubbo.filter;
 
+import com.alibaba.dubbo.common.Constants;
+import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.*;
 import com.google.common.collect.Lists;
 import com.thebeastshop.tx.constant.TxConstant;
@@ -25,6 +27,7 @@ import java.text.MessageFormat;
 /**
  * DUBBO调用拦截器
  */
+@Activate(group = {Constants.CONSUMER},order = -10000)
 public class DubboTxFilter implements Filter {
 
     private final static Logger log = LoggerFactory.getLogger(DubboTxFilter.class);

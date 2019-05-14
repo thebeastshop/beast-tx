@@ -26,24 +26,26 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.util.ServiceLoader;
+import java.util.function.Consumer;
 
 /**
  * BeastTx注解切面
  */
 @Aspect
-public class TxAspect implements ApplicationContextAware {
+public class TxAspect implements ApplicationContextAware, InitializingBean {
 
     private final Logger log = LoggerFactory.getLogger(TxAspect.class);
 
     private static ApplicationContext applicationContext = null;
 
-    @Resource
     private SocketClient socketClient;
 
     @Pointcut("@annotation(com.thebeastshop.tx.annotation.BeastTx)")
@@ -121,5 +123,14 @@ public class TxAspect implements ApplicationContextAware {
         monitorVo.setTxArgs(context.getTxArgs());
         monitorVo.setTxContextState(context.getTxContextState());
         return monitorVo;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        try{
+            socketClient = TxAspect.getApplicationContext().getBean(SocketClient.class);
+        }catch (Throwable t){
+            log.warn("couldn't find finsockerClient instance in spring context");
+        }
     }
 }

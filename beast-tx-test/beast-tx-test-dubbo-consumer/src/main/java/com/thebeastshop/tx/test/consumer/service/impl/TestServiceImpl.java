@@ -23,7 +23,6 @@ public class TestServiceImpl implements TestService {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    @Transactional
     @BeastTx
     public void consumerTest() {
         jdbcTemplate.execute("insert into user (name, age) values ('beast-tx', '99131')");

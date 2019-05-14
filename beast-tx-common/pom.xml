@@ -16,6 +16,10 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
@@ -31,11 +35,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-		<!--<dependency>
-            <groupId>com.thebeastshop</groupId>
-            <artifactId>beast-tx-socket-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>-->
     </dependencies>
 
 </project>
