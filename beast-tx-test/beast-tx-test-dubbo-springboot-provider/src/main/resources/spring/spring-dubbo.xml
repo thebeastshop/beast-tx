@@ -5,9 +5,13 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://code.alibabatech.com/schema/dubbo
-        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
-        ">
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-	<dubbo:service interface="com.thebeastshop.tx.test.consumer.TestService" ref="testService" />
+    <dubbo:application name="tx-demo-provider"/>
+
+    <dubbo:registry address="${dubbo.address}" group="${dubbo.group}" version="${dubbo.version:null}" file="${dubbo.cache.filepath}"/>
+
+    <dubbo:protocol name="dubbo" port="${dubbo.port}"/>
+
 
 </beans>

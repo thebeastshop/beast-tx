@@ -130,7 +130,7 @@ public class TxAspect implements ApplicationContextAware, InitializingBean {
         try{
             socketClient = TxAspect.getApplicationContext().getBean(SocketClient.class);
         }catch (Throwable t){
-            log.warn("couldn't find finsockerClient instance in spring context");
+            log.warn("couldn't find monitor socketClient instance in spring context");
         }
     }
 }

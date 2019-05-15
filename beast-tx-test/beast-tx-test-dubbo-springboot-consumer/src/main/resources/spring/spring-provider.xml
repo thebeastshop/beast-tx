@@ -8,6 +8,6 @@
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         ">
 
-	<dubbo:service interface="com.thebeastshop.tx.test.consumer.TestService" ref="testService" />
+	<dubbo:service interface="com.thebeastshop.tx.test.service.TestService" ref="testService" />
 
 </beans>

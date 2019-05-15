@@ -1,13 +1,13 @@
-package com.thebeastshop.tx.test.consumer.service.impl;
+package com.thebeastshop.tx.test.service.impl;
 
 import com.thebeastshop.tx.annotation.BeastTx;
-import com.thebeastshop.tx.test.consumer.service.TestService;
+import com.thebeastshop.tx.test.service.TestService;
 import com.thebeastshop.tx.test.service.DemoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 
 
