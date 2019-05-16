@@ -3,8 +3,6 @@ package com.thebeastshop.tx.test.sc.consumer.config;
 import com.thebeastshop.tx.aop.TxAspect;
 import com.thebeastshop.tx.feign.aop.FeignTxAspect;
 import com.thebeastshop.tx.feign.spring.FeignMethodScanner;
-import com.thebeastshop.tx.socket.client.SocketClient;
-import com.thebeastshop.tx.socket.factory.SocketClientFactory;
 import feign.Request;
 import feign.Retryer;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,9 +32,7 @@ public class BeanConfiguration {
 
     @Bean
     public FeignMethodScanner feignMethodScanner(){
-        FeignMethodScanner scanner = new FeignMethodScanner();
-        scanner.setFeignPackage("com.thebeastshop.tx.test.sc.consumer.feign");
-        return scanner;
+        return new FeignMethodScanner();
     }
 
     @Bean

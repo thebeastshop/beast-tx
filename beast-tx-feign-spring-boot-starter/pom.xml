@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>beast-tx-dubbo-spring-boot-starter</artifactId>
+    <artifactId>beast-tx-feign-spring-boot-starter</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.thebeastshop</groupId>
-            <artifactId>beast-tx-dubbo</artifactId>
+            <artifactId>beast-tx-feign</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

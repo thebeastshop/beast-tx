@@ -194,5 +194,6 @@
 		<module>beast-tx-socket-tio</module>
 		<module>beast-tx-socket-netty</module>
         <module>beast-tx-dubbo-spring-boot-starter</module>
-    </modules>
+		<module>beast-tx-feign-spring-boot-starter</module>
+	</modules>
 </project>

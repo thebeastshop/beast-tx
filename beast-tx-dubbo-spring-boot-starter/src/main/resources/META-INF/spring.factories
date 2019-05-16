@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.thebeastshop.tx.dubbo.springboot.TxDubboAutoConfiguation
+  com.thebeastshop.tx.dubbo.springboot.TxDubboAutoConfiguration
 
 
