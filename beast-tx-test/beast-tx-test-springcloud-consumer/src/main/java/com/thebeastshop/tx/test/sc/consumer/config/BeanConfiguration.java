@@ -29,28 +29,4 @@ public class BeanConfiguration {
     public Retryer feignRetryer() {
         return Retryer.NEVER_RETRY;
     }
-
-    @Bean
-    public FeignMethodScanner feignMethodScanner(){
-        return new FeignMethodScanner();
-    }
-
-    @Bean
-    public TxAspect txAspect(){
-        return new TxAspect();
-    }
-
-    @Bean
-    public FeignTxAspect feignTxAspect(){
-        return new FeignTxAspect();
-    }
-
-    /*@Bean
-    public SocketClientFactory socketClient() throws Exception {
-        SocketClientFactory factory=  new SocketClientFactory();
-        factory.setIp("127.0.0.1");
-        factory.setPort(6789);
-        return factory;
-    }*/
-
 }

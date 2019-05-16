@@ -1,6 +1,8 @@
 package com.thebeastshop.tx.feign.springboot;
 
 import com.thebeastshop.tx.aop.TxAspect;
+import com.thebeastshop.tx.feign.aop.FeignTxAspect;
+import com.thebeastshop.tx.feign.spring.FeignMethodScanner;
 import com.thebeastshop.tx.socket.client.SocketClient;
 import com.thebeastshop.tx.socket.factory.SocketClientFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -30,5 +32,13 @@ public class TxFeignAutoConfiguration {
         return new TxAspect();
     }
 
+    @Bean
+    public FeignTxAspect feignTxAspect(){
+        return new FeignTxAspect();
+    }
 
+    @Bean
+    public FeignMethodScanner feignMethodScanner(){
+        return new FeignMethodScanner();
+    }
 }

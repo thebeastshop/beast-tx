@@ -12,7 +12,7 @@ eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:1111/eureka/
-logging:
-  level:
-    root: info
-    org.springframework.web: info
+#tx:
+#  monitor:
+#    ip: 127.0.0.1
+#    port: 6789

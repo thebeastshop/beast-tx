@@ -20,7 +20,12 @@
         <dependency>
             <groupId>com.thebeastshop</groupId>
             <artifactId>beast-tx-socket-netty</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.thebeastshop</groupId>
+            <artifactId>beast-tx-feign-spring-boot-starter</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
