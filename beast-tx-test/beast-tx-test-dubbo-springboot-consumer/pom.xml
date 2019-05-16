@@ -41,6 +41,11 @@
             <artifactId>beast-tx-test-dubbo-provider-api</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.thebeastshop</groupId>
+            <artifactId>beast-tx-socket-netty</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
