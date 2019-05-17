@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 /**
@@ -21,31 +22,7 @@ public class InetUtils {
 
     private static final Logger log = LoggerFactory.getLogger(InetUtils.class);
 
-    private static InetAddress getLocalAddress() {
-        try {
-            for (Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces(); interfaces.hasMoreElements();) {
-                NetworkInterface networkInterface = interfaces.nextElement();
-                if (networkInterface.isLoopback() || networkInterface.isVirtual() || !networkInterface.isUp()) {
-                    continue;
-                }
-                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
-                if (addresses.hasMoreElements()) {
-                    return addresses.nextElement();
-                }
-            }
-        } catch (Exception e) {
-            log.debug("Error when getting host ip address: <{}>.", e.getMessage());
-            throw new IllegalStateException("Cannot get LocalHost InetAddress, please check your network!");
-        }
-        return null;
-    }
-
-    public static String getAddress(){
-        return getLocalAddress().getHostAddress();
-    }
-
-    public static void main(String[] args) {
-        String encode = getAddress();
-        System.out.println(encode);
+    public static InetAddress getAddress() throws UnknownHostException {
+        return InetAddress.getLocalHost();
     }
 }

@@ -21,7 +21,9 @@ public class TxContext {
 
     private final static Logger log = LoggerFactory.getLogger(TxContext.class);
 
-    private String nodeId;
+    private String nodeIp;
+
+    private String nodeHostName;
 
     private Long txId;
 
@@ -37,8 +39,9 @@ public class TxContext {
 
     private final ConcurrentLinkedDeque<InvokeContent> invokeQueue = new ConcurrentLinkedDeque<>();
 
-    public TxContext(String nodeId, Long txId,String txClassName,String txMethodName,Object[] txArgs,TxContextStateEnum txContextState) {
-        this.nodeId = nodeId;
+    public TxContext(String nodeIp, String nodeHostName, Long txId,String txClassName,String txMethodName,Object[] txArgs,TxContextStateEnum txContextState) {
+        this.nodeIp = nodeIp;
+        this.nodeHostName = nodeHostName;
         this.txId = txId;
         this.txClassName = txClassName;
         this.txMethodName = txMethodName;
@@ -46,12 +49,20 @@ public class TxContext {
         this.txContextState = txContextState;
     }
 
-    public String getNodeId() {
-        return nodeId;
+    public String getNodeIp() {
+        return nodeIp;
     }
 
-    public void setNodeId(String nodeId) {
-        this.nodeId = nodeId;
+    public void setNodeIp(String nodeIp) {
+        this.nodeIp = nodeIp;
+    }
+
+    public String getNodeHostName() {
+        return nodeHostName;
+    }
+
+    public void setNodeHostName(String nodeHostName) {
+        this.nodeHostName = nodeHostName;
     }
 
     public Long getTxId() {

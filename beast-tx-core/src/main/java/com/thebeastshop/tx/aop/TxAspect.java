@@ -59,7 +59,9 @@ public class TxAspect implements ApplicationContextAware, InitializingBean {
         Object[] txArgs = jp.getArgs();
         TxContext txContext = null;
         try {
-            txContext = new TxContext(InetUtils.getAddress(),UniqueIdGenerator.generateId(),
+            txContext = new TxContext(InetUtils.getAddress().getHostAddress(),
+                    InetUtils.getAddress().getHostName(),
+                    UniqueIdGenerator.generateId(),
                     clazz.getName(),
                     txMethod.getName(),
                     txArgs,
@@ -116,7 +118,8 @@ public class TxAspect implements ApplicationContextAware, InitializingBean {
 
     private MonitorVo convertToMonitorVo(TxContext context){
         MonitorVo monitorVo = new MonitorVo();
-        monitorVo.setNodeId(context.getNodeId());
+        monitorVo.setNodeIp(context.getNodeIp());
+        monitorVo.setNodeHostName(context.getNodeHostName());
         monitorVo.setTxId(context.getTxId());
         monitorVo.setTxClassName(context.getTxClassName());
         monitorVo.setTxMethodName(context.getTxMethodName());

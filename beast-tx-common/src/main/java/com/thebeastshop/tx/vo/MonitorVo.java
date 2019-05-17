@@ -13,7 +13,9 @@ import java.io.Serializable;
 
 public class MonitorVo implements Serializable {
 
-    private String nodeId;
+    private String nodeIp;
+
+    private String nodeHostName;
 
     private Long txId;
 
@@ -27,12 +29,20 @@ public class MonitorVo implements Serializable {
 
     private String exceptionMessage;
 
-    public String getNodeId() {
-        return nodeId;
+    public String getNodeIp() {
+        return nodeIp;
     }
 
-    public void setNodeId(String nodeId) {
-        this.nodeId = nodeId;
+    public void setNodeIp(String nodeIp) {
+        this.nodeIp = nodeIp;
+    }
+
+    public String getNodeHostName() {
+        return nodeHostName;
+    }
+
+    public void setNodeHostName(String nodeHostName) {
+        this.nodeHostName = nodeHostName;
     }
 
     public Long getTxId() {

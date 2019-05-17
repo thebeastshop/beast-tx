@@ -20,7 +20,7 @@ import java.util.ServiceLoader;
 @Component
 public class MonitorServer implements CommandLineRunner {
     @Override
-    public void run(String... strings) throws Exception {
+    public void run(String... strings) {
         // -------启动网络服务端-------
         ServiceLoader<SocketServer> loader = ServiceLoader.load(SocketServer.class);
         if (loader != null && loader.iterator().hasNext()) {
