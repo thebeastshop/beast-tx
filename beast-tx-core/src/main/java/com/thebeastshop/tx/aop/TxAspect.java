@@ -10,6 +10,7 @@ package com.thebeastshop.tx.aop;
 import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.context.TxContext;
+import com.thebeastshop.tx.context.TxContextManager;
 import com.thebeastshop.tx.enums.TxContextStateEnum;
 import com.thebeastshop.tx.exceptions.RollbackException;
 import com.thebeastshop.tx.exceptions.TransactionException;
@@ -29,12 +30,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
-import javax.annotation.Resource;
 import java.lang.reflect.Method;
-import java.util.ServiceLoader;
-import java.util.function.Consumer;
 
 /**
  * BeastTx注解切面
@@ -66,7 +62,8 @@ public class TxAspect implements ApplicationContextAware, InitializingBean {
                     txMethod.getName(),
                     txArgs,
                     TxContextStateEnum.INIT);
-            TransactionSynchronizationManager.bindResource(TxConstant.TRANSACTION_CONTEXT_KEY, txContext);
+
+            TxContextManager.bindTxContext(txContext);
             log.info("[BEAST-TX]开启事务，事务ID[{}]",txContext.getTxId());
 
             Object result = jp.proceed();
@@ -103,7 +100,7 @@ public class TxAspect implements ApplicationContextAware, InitializingBean {
             }catch(Exception e){
                 log.error("[BEAST-TX]发送监控数据异常",e);
             }
-            TransactionSynchronizationManager.unbindResource(TxConstant.TRANSACTION_CONTEXT_KEY);
+            TxContextManager.unbindTxContext();
         }
     }
 

@@ -11,15 +11,14 @@ import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.*;
 import com.google.common.collect.Lists;
-import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.context.TxContext;
+import com.thebeastshop.tx.context.TxContextManager;
 import com.thebeastshop.tx.context.content.InvokeContent;
 import com.thebeastshop.tx.context.content.MethodContent;
 import com.thebeastshop.tx.dubbo.spring.DubboMethodScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
@@ -35,8 +34,8 @@ public class DubboTxFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         TxContext txContext = null;
-        if(TransactionSynchronizationManager.hasResource(TxConstant.TRANSACTION_CONTEXT_KEY)){
-            txContext = (TxContext)TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_CONTEXT_KEY);
+        if(TxContextManager.hasTxContent()){
+            txContext = TxContextManager.getTxContext();
         }
 
         Method method = null;

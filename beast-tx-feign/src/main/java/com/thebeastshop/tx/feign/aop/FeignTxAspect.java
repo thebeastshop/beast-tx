@@ -8,9 +8,9 @@
 package com.thebeastshop.tx.feign.aop;
 
 import com.google.common.collect.Lists;
-import com.thebeastshop.tx.constant.TxConstant;
 import com.thebeastshop.tx.context.MethodDefinationManager;
 import com.thebeastshop.tx.context.TxContext;
+import com.thebeastshop.tx.context.TxContextManager;
 import com.thebeastshop.tx.context.content.InvokeContent;
 import com.thebeastshop.tx.context.content.MethodContent;
 import com.thebeastshop.tx.feign.exceptions.FeignException;
@@ -22,8 +22,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
@@ -38,8 +36,8 @@ public class FeignTxAspect {
     @Around("cut()")
     public Object around(ProceedingJoinPoint jp){
         TxContext txContext = null;
-        if(TransactionSynchronizationManager.hasResource(TxConstant.TRANSACTION_CONTEXT_KEY)){
-            txContext = (TxContext)TransactionSynchronizationManager.getResource(TxConstant.TRANSACTION_CONTEXT_KEY);
+        if(TxContextManager.hasTxContent()){
+            txContext = TxContextManager.getTxContext();
         }
 
         MethodSignature signature = (MethodSignature)jp.getSignature();
