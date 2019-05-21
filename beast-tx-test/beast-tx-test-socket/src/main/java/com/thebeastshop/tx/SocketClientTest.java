@@ -29,7 +29,8 @@ public class SocketClientTest {
 
 		SocketClient client = SocketClientProvider.create(config);
 		MonitorVo monitorVo = new MonitorVo();
-		monitorVo.setNodeId("127.0.0.1");
+		monitorVo.setNodeIp("127.0.0.1");
+		monitorVo.setNodeHostName("myhost");
 		monitorVo.setTxId(1122334455L);
 		monitorVo.setTxClassName("DemoClassName");
 		monitorVo.setTxMethodName("demoMethod");
