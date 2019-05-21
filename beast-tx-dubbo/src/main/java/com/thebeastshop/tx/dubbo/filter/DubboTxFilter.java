@@ -26,7 +26,7 @@ import java.text.MessageFormat;
 /**
  * DUBBO调用拦截器
  */
-@Activate(group = {Constants.CONSUMER},order = -10000)
+@Activate(group = {Constants.CONSUMER},order = -1000)
 public class DubboTxFilter implements Filter {
 
     private final static Logger log = LoggerFactory.getLogger(DubboTxFilter.class);
