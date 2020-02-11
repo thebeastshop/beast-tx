@@ -1,8 +1,8 @@
 ![logo](media/logo.png)
-> 一个超好用的可以加上自己业务数据的日志切面框架
+> 一个基于TCC的分布式事务框架，支持dubbo和spring cloud
 
-# **aspect-log**
+# **beast-tx**
 
-[Gitee](https://gitee.com/bryan31/aspect-log)
-[GitHub](https://github.com/thebeastshop/aspect-log)
+[Gitee](https://gitee.com/bryan31/beast-tx)
+[GitHub](https://github.com/thebeastshop/beast-tx)
 [快速开始](#_1-介绍)

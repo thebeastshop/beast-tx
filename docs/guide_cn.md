@@ -1,281 +1,335 @@
 # 1. 介绍
 
-Aspect-log是一个日志切面框架，能通过简单的配置在你的日志中统一加上你的业务标识。方便进行日志的分析和定位。特性如下：
+Beast-tx是一个轻量级不侵入业务代码的TCC分布式事务框架。支持dubbo和spring cloud。
 
-1.使用简单，不侵入业务代码。只需要在方法上配置标注。
+有以下特性：
 
-2.支持log4j，logback，log4j2三种常见的日志框架。
+1.支持主流的RPC框架：dubbo和spring cloud
 
-3.配置极其简单。提供“一键配置”，自动识别日志框架。
+2.配置简单。不侵入业务代码
 
-4.在方法上配置，无论调用多深或者异步调用。也可以统一加上业务标识。
-
-5.完全无性能损耗。
+3.提供一个事务信息收集器，可以自行扩展。
 
 
 
-?> 项目提供3种框架的测试用例，可以pull下来试试
+?> 项目提供beast-tx_test整个测试用例，文档中以下所有的代码示例，都可以在这个测试用例中找到，供参考
+
+![img](media/img1.jpg)
 
 
 
-# 2. Springboot的Maven依赖
+# 2. Beast-tx For Dubbo
 
-在你的项目中加上依赖，maven的GAV为：
-
-```xml
-<dependency>
-  <groupId>com.thebeastshop</groupId>
-  <artifactId>aspect-log-spring-boot-starter</artifactId>
-  <version>${version}</version>
-</dependency>
-```
-
-version为<font color=red>**1.0**</font>，目前中央仓库没有上传，需要自己编译打包
-
-
-
-# 3. Spring的Maven依赖
+## 2.1 如果你使用spring
 
 在你的项目中加上依赖，maven的GAV为：
 
 ```xml
 <dependency>
   <groupId>com.thebeastshop</groupId>
-  <artifactId>aspect-log-core</artifactId>
+  <artifactId>beast-tx-dubbo</artifactId>
   <version>${version}</version>
 </dependency>
 ```
 
-version为<font color=red>**1.0**</font>，目前中央仓库没有上传，需要自己编译打包
+!> 目前中央仓库没有上传，需要自己编译打包
 
 
 
-# 4. AspectLog的配置
+然后在dubbo的消费者端的`applicationContext.xml`里配置如下：
 
-提供2种配置方法。
+```xml
+<aop:aspectj-autoproxy proxy-target-class="true"/>
+<bean class="com.thebeastshop.tx.aop.TxAspect"/>
+<bean class="com.thebeastshop.tx.dubbo.spring.DubboMethodScanner"/>
+```
 
-## 4.1 一键配置方法
 
-这种方式用javassit实现，只需要一句话就可以实现。
+
+## 2.2 如果你使用springboot
+
+在你的项目中加上依赖，maven的GAV为：
+
+```xml
+ <dependency>
+   <groupId>com.thebeastshop</groupId>
+   <artifactId>beast-tx-dubbo-spring-boot-starter</artifactId>
+   <version>${version}</version>
+</dependency>
+```
+
+!> 目前中央仓库没有上传，需要自己编译打包
+
+
+
+> 由于对springboot作了自动装配，因此只需引入包即可。不用额外配置
+
+
+
+## 2.3 使用方法
+
+假设你的dubbo提供者端有一个service：DemoService，接口定义如下：
 
 ```java
-@SpringBootApplication
-public class Runner {
+String test1(String name);
 
-    static {AspectLogEnhance.enhance();}//进行日志增强，自动判断日志框架
+String test2(String name, Integer age);
 
-    public static void main(String[] args) {
-        try {
-            SpringApplication.run(Runner.class, args);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        while (true) {
-            try {
-                Thread.sleep(60000);
-            } catch (Throwable e) {
-            	e.printStackTrace();
-            }
-        }
+String test3(Long id);
+```
+
+假设test方法需要支持分布式TCC事务，则需要遵循以下约定：
+
+- 定义并实现`tryTest(String name)`方法，主要用于校验一些前置条件，如参数合法性，业务的前置判断等。参数必须和主体方法参数一致，<font color='red'>但这不是必须的，如果您的前置判断写在test方法主体里，那这个方法可以不定义</font>。
+- 定义并实现`cancelTest(String str)`方法，用于做业务的回滚操作。<font color='red'>如果在回滚方法里需要用到方法主体返回的结果，也可以定义为`cancelTest(String str, Object result)`。BeastTx对这2种定义都支持</font>。
+
+
+
+然后在你的dubbo消费者端需要加入分布式事务的service中的method上加上`@@BeastTx`标签即可
+
+
+
+完整例子如下：
+
+dubbo提供者端
+
+```java
+public interface DemoService {
+
+	boolean tryTest1(String name);
+	
+  String test1(String name);
+
+  String test2(String name, Integer age);
+
+  String test3(Long id);
+	
+	void cancelTest1(String str);
+	
+	void cancelTest2(String str);
+}
+```
+
+dubbo消费者端
+
+```java
+@Service("testService")
+public class TestServiceImpl implements TestService {
+
+    private final static Logger log = LoggerFactory.getLogger(TestServiceImpl.class);
+
+    @Resource
+    private DemoService demoService;//这是另外一个服务的service
+
+    @Resource
+    private JdbcTemplate jdbcTemplate;
+
+    @Override
+    @BeastTx
+    public void consumerTest() {
+        jdbcTemplate.execute("insert into user (name, age) values ('beast-tx', '99131')");
+
+        String result = demoService.test1("jack");
+        log.info("result:" + result);
+        demoService.test3(8L);
+    }
+}
+```
+
+以上示例为一个`本地事务`+`dubbo远程事务test1`+`dubbo远程事务test3`，假设`dubboService.test3`出错。那整个执行顺序如下：
+
+1. 先执行本地事务`jdbcTemplate.execute("insert into user (name, age) values ('beast-tx', '99131')")`
+2. 自动执行`demoService.tryTest1(String name)`进行业务前置判断检查
+3. 执行`demoService.test1(String name)`进行业务操作
+4. 执行`demoService.test3(Long id)`进行业务操作，抛出错误
+5. 自动执行`demoService.cancelTest3(Long id)`进行回滚操作
+6. 本地事务的回滚操作
+
+
+
+# 3.Beast-tx For Spring Cloud
+
+## 3.1 依赖和配置
+
+在你的项目中加上依赖，maven的GAV为：
+
+```xml
+<dependency>
+  <groupId>com.thebeastshop</groupId>
+  <artifactId>beast-tx-feign-spring-boot-starter</artifactId>
+  <version>${version}</version>
+</dependency>
+```
+
+!> 目前中央仓库没有上传，需要自己编译打包
+
+
+
+> springboot会自动装配，如无其他配置
+
+
+
+## 3.2 使用方法
+
+对Spring Cloud的Feign提供支持。所需要用的方法约束，和`2.3`类似，不再重复
+
+下面只贴出例子：
+
+Feign的提供者端：
+
+```java
+@RestController
+public class ProviderController {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
+
+    @Autowired
+    private ProviderDomain providerDomain;
+
+    @RequestMapping("/hi")
+    public String sayHello(@RequestParam String name){
+        System.out.println("invoke method hi,name="+name);
+        String services = "Services:" + discoveryClient.getServices();
+        System.out.println(services);
+        return "hello," + name;
+    }
+
+    @RequestMapping("/tryTest1")
+    public boolean tryTest1(@RequestParam String name){
+        log.info("invoked tryTest1");
+        return providerDomain.tryTest1(name);
+    }
+
+    @RequestMapping("/test1")
+    public String test1(@RequestParam String name){
+        log.info("invoked test1");
+        return providerDomain.test1(name);
+    }
+
+    @RequestMapping("/cancelTest1")
+    public void cancelTest1(@RequestParam String name){
+        log.info("invoked cancelTest1");
+        providerDomain.cancelTest1(name);
+    }
+
+    public String test2(@RequestParam String name){
+        return providerDomain.test2(name);
     }
 }
 ```
 
 
 
-!> 因为这里是用javassit实现，需要在jvm加载对应日志框架的类之前，进行字节码增强。所以这里用static块，并且Springboot/Spring的启动类中不能加入log定义。否则会不生效。如果你是用tomcat/jboss/jetty等容器启动的，则参照`4.2 Log框架配置文件增强`
+Feign的消费者端
 
-
-
-## 4.2 Log框架配置文件增强
-
-针对于主流的Log日志框架作了适配
-
-### 4.2.1 Log4J配置文件增强
-
-只需要把`layout`的实现类换掉就可以了
-
-每个公司的Log4J的模板大同小异，这里只给出xml的例子
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-<log4j:configuration>
-    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
-		<layout class="com.thebeastshop.aspectlog.enhance.log4j.AspectLog4jPatternLayout">
-            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} [%p] %m  >> %c:%L%n"/>
-        </layout>
-    </appender>
-    <appender name="fileout" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="./logs/test.log"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} [%p] %m  >> %c:%L%n"/>
-        </layout>
-    </appender>
-    <root>
-        <priority value="info" />
-        <appender-ref ref="stdout"/>
-        <appender-ref ref="fileout"/>
-    </root>
-</log4j:configuration>
-
-```
-
-
-
-### 4.2.2 Logback的配置文件增强
-
-换掉`encoder`的实现类或者换掉`layout`的实现类就可以了
-
-以下给出xml示例：
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="false">
-    <property name="APP_NAME" value="logtest"/>
-    <property name="LOG_HOME" value="./logs" />
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder class="com.thebeastshop.aspectlog.enhance.logback.AspectLogbackEncoder">
-			  <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-		</encoder>
-    </appender>
-    <appender name="FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${LOG_HOME}/${APP_NAME}.log</File>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_HOME}/${APP_NAME}.log.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
-            <MaxHistory>30</MaxHistory>
-            <maxFileSize>1000MB</maxFileSize>
-        </rollingPolicy>
-        <encoder class="com.thebeastshop.aspectlog.enhance.logback.AspectLogbackEncoder">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <!-- 日志输出级别 -->
-    <root level="INFO">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
-    </root>
-</configuration>
-
-```
-
-
-
-## 4.2.3 Log4J2的配置文件增强
-
-log4J2由于是通过插件形式实现的，log4J2有自动扫描插件的功能。所以无需对配置文件做任何更改就能生效。
-
-
-
-# 5 AspectLog的使用方法
-
-在你的方法上加上`@AspectLog`标注。简单的例子如下：
+Feign接口定义：
 
 ```java
-@AspectLog({"id"})
-public void demo1(String id,String name){
-  log.info("这是第一条日志");
-  log.info("这是第二条日志");
-  log.info("这是第三条日志");
-  new Thread(() -> log.info("这是异步日志")).start();
+@FeignClient("test-provider")
+public interface TxTestSayhiFeignClient {
+    @RequestMapping(value = "hi",method = RequestMethod.GET)
+    public String sayHello(@RequestParam(value = "name") String name);
+
+    @RequestMapping(value = "tryTest1",method = RequestMethod.GET)
+    public boolean tryTest1(@RequestParam(value = "name") String name);
+
+    @RequestMapping(value = "test1",method = RequestMethod.GET)
+    public String test1(@RequestParam(value = "name") String name);
+
+    @RequestMapping(value = "cancelTest1",method = RequestMethod.GET)
+    public void cancelTest1(@RequestParam(value ="name") String name);
+
+    @RequestMapping(value = "test2",method = RequestMethod.GET)
+    public String test2(@RequestParam(value = "name") String name);
 }
 ```
 
-假设id的值为'NO1234'，日志打出来的样子如下：
-
-```
-2020-02-08 20:22:33.945 [main] INFO  com.thebeastshop.aspectlog.main.Demo - [NO1234] 这是第一条日志
-2020-02-08 20:22:33.945 [main] INFO  com.thebeastshop.aspectlog.main.Demo - [NO1234] 这是第二条日志
-2020-02-08 20:22:33.945 [main] INFO  com.thebeastshop.aspectlog.main.Demo - [NO1234] 这是第三条日志
-2020-02-08 20:22:33.948 [Thread-3] INFO  com.thebeastshop.aspectlog.main.Demo - [NO1234] 这是异步日志
-```
 
 
-
-> `@AspectLog`标注支持多个参数:
+消费者实现类：
 
 ```java
-@AspectLog({"id","name"})
-public void demo1(String id,String name){
-  log.info("这是第一条日志");
-  log.info("这是第二条日志");
-  log.info("这是第三条日志");
-  new Thread(() -> log.info("这是异步日志")).start();
+@Component
+public class ConsumerDomain {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private TxTestSayhiFeignClient txTestSayhiFeignClient;
+
+    @BeastTx
+    public String doTest(String name){
+        jdbcTemplate.execute("insert into user (name, age) values ('beast-tx', '99131')");
+
+        String result = txTestSayhiFeignClient.test1("jack");
+        System.out.println("result:" + result);
+        txTestSayhiFeignClient.test2("rose");
+        return "ok";
+    }
 }
 ```
 
-假设传入id的值为'NO1234'，name为'jenny'，日志打出来的样子如下：
-
-```
-2020-02-08 22:09:40.101 [main] INFO  com.thebeastshop.aspectlog.main.Demo - [NO1234-jenny] 这是第一条日志
-2020-02-08 22:09:40.101 [main] INFO  com.thebeastshop.aspectlog.main.Demo - [NO1234-jenny] 这是第二条日志
-2020-02-08 22:09:40.102 [main] INFO  com.thebeastshop.aspectlog.main.Demo - [NO1234-jenny] 这是第三条日志
-2020-02-08 22:09:40.103 [Thread-3] INFO  com.thebeastshop.aspectlog.main.Demo - [NO1234-jenny] 这是异步日志
-```
 
 
+以上示例为一个`本地事务`+`Feign远程事务test1`+`Feign远程事务test2`，假设`txTestSayhiFeignClient.test2`出错。那整个执行顺序如下：
 
-> `@AspectLog`支持自定pattern和多个参数的连接符
-
-```java
-@AspectLog(value = {"id","name"},pattern = "<-{}->",joint = "_")
-public void demo(String id,String name){
-  log.info("加了patter和joint的示例");
-}
-```
-
-日志打出来的样子如下：
-
-```
-2020-02-08 22:09:40.103 [main] INFO  com.thebeastshop.aspectlog.main.Demo - <-NO1234_jenny-> 加了patter和joint的示例
-```
+1. 先执行本地事务`jdbcTemplate.execute("insert into user (name, age) values ('beast-tx', '99131')")`
+2. 自动执行`txTestSayhiFeignClient.tryTest1(String name)`进行业务前置判断检查
+3. 执行`txTestSayhiFeignClient.test1(String name)`进行业务操作
+4. 执行`txTestSayhiFeignClient.test2(String name)`进行业务操作，抛出错误
+5. 自动执行`txTestSayhiFeignClient.cancelTest2(String name)`进行回滚操作
+6. 本地事务的回滚操作
 
 
 
-> `@AspectLog`支持点操作符，适用于对象的取值，支持类型为业务对象和Map
+# 4.回滚之后的Hook接口
 
-```java
-@AspectLog({"person.id","person.age","person.company.department.dptId"})
-public void demo(Person person){
-  log.info("多参数加多层级示例");
-}
-```
+当分布式事务回滚之后，Beast-Tx提供了一个可供扩展的hook接口。
 
-日志打出来的样子如下：
+只要你的项目中实现了`CancelInvokeHook`这个接口并注册到spring容器中。在项目启动的时候就会被自动扫描到。
 
-```
-2020-02-08 22:09:40.110 [main] INFO  com.thebeastshop.aspectlog.main.Demo - [31-25-80013] 多参数加多层级示例
-```
+当你的分布式事务回滚之后，会自动执行这个hook实现。你可以用来持久化错误信息，打印回滚链路，或者进行一些其他的业务操作。
 
 
 
-> `@AspectLog`支持编程式设值
+# 5.监控的扩展
 
-```java
-public void demo(){
-  AspectLogContext.putLogValue("[SO1001]");
-  log.info("代码控制示例");
-}
+Beast-Tx留了一系列的监控扩展点。
+
+## 5.1 监控的server端（半成品）
+
+其中监控的server端为`beast-tx-monitor`，如启动的话，这个项目目前只接受每一条的事务上下文并打印，并没有对事务上下文作进一步的监控业务，如有兴趣可以自行实现
+
+## 5.2 client端
+
+如果您在dubbo/Spring Cloud消费者端的`application.yml`配了如下配置
+
+```yml
+tx:
+  monitor:
+    ip: 127.0.0.1
+    port: 6789
 ```
 
-日志打出来的样子：
-
-```
-2020-02-08 22:09:40.110 [main] INFO  com.thebeastshop.aspectlog.main.Demo - [SO1001] 代码控制示例
-```
+springboot启动时会自动装配，在每一个分布式事务结束后，会把这个事务中的详细内容发送到server端。
 
 
 
-# 6. 即将支持以下特性
+其中项目对socket提供了2个实现：
 
-* javaagent方式配置支持，完全不侵入项目
-* 支持配置Converter，支持值的转换和计算
-* 支持更多的基础类型，支持json的打印
-* 支持log日志任意位置的配置
+`beast-tx-socket-netty`
+
+`beast-tx-socket-tio`
+
+都是用SPI实现的，默认用netty，想换实现，只需换一个依赖包即可
 
 
 
-# 7.联系作者
+# 6.联系作者
+
 ![wx](media/wx.jpeg)
 
