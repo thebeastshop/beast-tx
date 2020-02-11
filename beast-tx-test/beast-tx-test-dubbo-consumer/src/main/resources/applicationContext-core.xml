@@ -11,7 +11,7 @@
        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
 	<!-- 指定Bean的扫描位置 -->
-	<context:component-scan base-package="com.thebeastshop.tx.test.consumer.service" />
+	<context:component-scan base-package="com.thebeastshop.tx.test.service" />
 
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
 	<bean class="com.thebeastshop.tx.aop.TxAspect"/>
