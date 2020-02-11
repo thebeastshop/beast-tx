@@ -87,7 +87,7 @@ String test3(Long id);
 
 
 
-然后在你的dubbo消费者端需要加入分布式事务的service中的method上加上`@@BeastTx`标签即可
+然后在你的dubbo消费者端需要加入分布式事务的service中的method上加上`@BeastTx`标签即可
 
 
 
