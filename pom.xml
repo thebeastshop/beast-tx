@@ -23,7 +23,7 @@
 		<dubbo.version>2.8.4</dubbo.version>
 		<zk.version>3.4.6</zk.version>
 		<zkClient.version>0.1</zkClient.version>
-		<mysql.version>5.1.41</mysql.version>
+		<mysql.version>8.0.16</mysql.version>
 		<druid.version>1.0.14</druid.version>
 		<javassist.version>3.22.0-GA</javassist.version>
 		<aspectj.version>1.8.13</aspectj.version>
